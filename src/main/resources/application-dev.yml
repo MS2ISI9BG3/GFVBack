@@ -1,0 +1,77 @@
+
+server:
+  port: 9988
+  servlet:
+    context-path: /gfv
+
+logging:
+  level:
+    ROOT: DEBUG
+    io.github.jhipster: DEBUG
+    fr.eni.ms2isi9bg3.gfv: DEBUG
+
+spring:
+  profiles:
+    active: dev
+  devtools:
+    restart:
+      enabled: true
+      additional-exclude: static/**,.h2.server.properties
+  datasource:
+    url: jdbc:h2:file:./target/h2db/db/gfv;DB_CLOSE_DELAY=-1
+    username: gfv
+    password:
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  h2:
+    console:
+      enabled: false
+  jpa:
+     show-sql: true
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: donald.ndizeye@gmail.com
+    password: nepedfhaccfcpxbv
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  liquibase:
+    enabled: false
+
+jwt:
+  token:
+    secret:
+    # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+    base64-secret: M5c05v41NSNaJiEBKT740uYsMsnEHNxWpIknjwRuqe2kaq4bSQu9vs2llt7IEqA/RYtGiXJzmuTmKnZz4DhmvdGXzqcyEo0MKCZTz1MOkbWx1ta30C5lelknAcsiSiax/B9IwM5tc2EqPetdoRbJGrREA+h8H8jMfoeWri4z6eE=
+
+encoder:
+  database:
+    secretKey: MySuperSecretKey
+    algorithms: AES/ECB/PKCS5Padding
+    algorithm:
+      used: AES
+  url:
+    encryptor: MyLyfe&30SecretKey
+  feedback:
+    key: MyFeedback$30Key
+
+mail:
+  path:
+    #Dossier de resources dans lequel sont stockés les images utilisées dans les mails
+    images: templates/mails/images/
+
+#BaseUrl du front angular
+front:
+  base:
+    url: http://localhost:4200
+
+jhipster:
+  audit-events:
+    retention-period: 30 # Number of days before audit events are deleted.
