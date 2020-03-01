@@ -1,5 +1,7 @@
 package fr.eni.ms2isi9bg3.gfv.domain;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,6 +13,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "gfv_authority")
+@Data
 public class Authority implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -20,14 +23,6 @@ public class Authority implements Serializable {
 	@Id
 	@Column(length = 50)
 	private String name;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	@Override
 	public boolean equals(Object o) {

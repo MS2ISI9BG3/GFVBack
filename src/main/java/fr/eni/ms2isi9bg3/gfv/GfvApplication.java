@@ -4,19 +4,21 @@ import io.github.jhipster.config.DefaultProfileUtil;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
+@Slf4j
 public class GfvApplication {
 
-	private static final Logger log = LoggerFactory.getLogger(GfvApplication.class);
+	//private static final Logger log = LoggerFactory.getLogger(GfvApplication.class);
 
 	private final Environment env;
 
@@ -25,7 +27,6 @@ public class GfvApplication {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(GfvApplication.class, args);
 		SpringApplication app = new SpringApplication(GfvApplication.class);
 		DefaultProfileUtil.addDefaultProfile(app);
 		Environment env = app.run(args).getEnvironment();
@@ -62,6 +63,11 @@ public class GfvApplication {
 						serverPort,
 						contextPath,
 						env.getActiveProfiles());
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }

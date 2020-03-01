@@ -19,6 +19,8 @@
         <liquibase.version>3.8.0</liquibase.version>
         <!--<lombok.version>1.18.12</lombok.version>-->
         <profile.no-liquibase/>
+        <hibernate.version>5.4.10.Final</hibernate.version>
+        <hibernate-core.version>5.3.8.Final</hibernate-core.version>
     </properties>
 
     <dependencies>
@@ -162,11 +164,33 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt-jackson</artifactId>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
             <version>0.10.7</version>
-        <scope>runtime</scope>
+            <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>-->
 
     </dependencies>
 

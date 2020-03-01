@@ -1,12 +1,10 @@
 
 server:
   port: 9988
-  servlet:
-    context-path: /gfv
 
 logging:
   level:
-    ROOT: DEBUG
+    ROOT: INFO
     io.github.jhipster: DEBUG
     fr.eni.ms2isi9bg3.gfv: DEBUG
 
@@ -18,8 +16,8 @@ spring:
       enabled: true
       additional-exclude: static/**,.h2.server.properties
   datasource:
-    url: jdbc:h2:file:./target/h2db/db/gfv;DB_CLOSE_DELAY=-1
-    username: gfv
+    url: jdbc:mysql://localhost:3306/gfv?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&createDatabaseIfNotExist=true
+    username: root
     password:
     hikari:
       poolName: Hikari
@@ -28,7 +26,15 @@ spring:
     console:
       enabled: false
   jpa:
-     show-sql: true
+    show-sql: true
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+    hibernate:
+      ddl-auto: none
   mail:
     default-encoding: UTF-8
     host: smtp.gmail.com
@@ -43,7 +49,11 @@ spring:
           starttls:
             enable: true
   liquibase:
-    enabled: false
+    change-log: classpath:/db/liquibase-changeLog.xml
+    contexts: dev, faker
+    enabled: true
+  application:
+    name: GFV
 
 jwt:
   token:
@@ -75,3 +85,5 @@ front:
 jhipster:
   audit-events:
     retention-period: 30 # Number of days before audit events are deleted.
+  clientApp:
+    name: gfv

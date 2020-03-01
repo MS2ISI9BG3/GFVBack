@@ -2,6 +2,7 @@ package fr.eni.ms2isi9bg3.gfv.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.eni.ms2isi9bg3.gfv.config.Constants;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
@@ -18,6 +19,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "gfv_user")
+@Data
 public class User extends AbstractAuditingEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -89,119 +91,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
 					inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
 	@BatchSize(size = 20)
 	private Set<Authority> authorities = new HashSet<>();
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getLogin() {
-		return login;
-	}
-
-	// Lowercase the login before saving it in database
-	public void setLogin(String login) {
-		this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public boolean isActivated() {
-		return activated;
-	}
-
-	public void setActivated(boolean activated) {
-		this.activated = activated;
-	}
-
-	public boolean isArchived() {
-		return archived;
-	}
-
-	public void setArchived(boolean archived) {
-		this.archived = archived;
-	}
-
-	public String getActivationKey() {
-		return activationKey;
-	}
-
-	public void setActivationKey(String activationKey) {
-		this.activationKey = activationKey;
-	}
-
-	public String getResetKey() {
-		return resetKey;
-	}
-
-	public void setResetKey(String resetKey) {
-		this.resetKey = resetKey;
-	}
-
-	public Instant getResetDate() {
-		return resetDate;
-	}
-
-	public void setResetDate(Instant resetDate) {
-		this.resetDate = resetDate;
-	}
-
-	public Set<Authority> getAuthorities() {
-		return authorities;
-	}
-
-	public void setAuthorities(Set<Authority> authorities) {
-		this.authorities = authorities;
-	}
 
 	@Override
 	public boolean equals(Object o) {
