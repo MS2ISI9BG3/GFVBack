@@ -1,12 +1,14 @@
 package fr.eni.ms2isi9bg3.gfv.web.rest.vm;
 
 import fr.eni.ms2isi9bg3.gfv.service.dto.UserDTO;
+import lombok.Data;
 
 import javax.validation.constraints.Size;
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
  */
+@Data
 public class ManagedUserVM extends UserDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
@@ -18,14 +20,6 @@ public class ManagedUserVM extends UserDTO {
 
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override

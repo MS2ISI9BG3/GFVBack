@@ -60,17 +60,7 @@ jwt:
     secret:
     # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
     base64-secret: M5c05v41NSNaJiEBKT740uYsMsnEHNxWpIknjwRuqe2kaq4bSQu9vs2llt7IEqA/RYtGiXJzmuTmKnZz4DhmvdGXzqcyEo0MKCZTz1MOkbWx1ta30C5lelknAcsiSiax/B9IwM5tc2EqPetdoRbJGrREA+h8H8jMfoeWri4z6eE=
-
-encoder:
-  database:
-    secretKey: MySuperSecretKey
-    algorithms: AES/ECB/PKCS5Padding
-    algorithm:
-      used: AES
-  url:
-    encryptor: MyLyfe&30SecretKey
-  feedback:
-    key: MyFeedback$30Key
+    token-validity-in-seconds: 86400
 
 mail:
   path:
@@ -83,6 +73,19 @@ front:
     url: http://localhost:4200
 
 jhipster:
+  cache: # Cache configuration
+    ehcache: # Ehcache configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      max-entries: 100 # Number of objects in each cache entry
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        base64-secret: M5c05v41NSNaJiEBKT740uYsMsnEHNxWpIknjwRuqe2kaq4bSQu9vs2llt7IEqA/RYtGiXJzmuTmKnZz4DhmvdGXzqcyEo0MKCZTz1MOkbWx1ta30C5lelknAcsiSiax/B9IwM5tc2EqPetdoRbJGrREA+h8H8jMfoeWri4z6eE=
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://127.0.0.1:9988
   audit-events:
     retention-period: 30 # Number of days before audit events are deleted.
   clientApp:

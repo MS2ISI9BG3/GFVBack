@@ -3,6 +3,7 @@ package fr.eni.ms2isi9bg3.gfv.service.dto;
 import fr.eni.ms2isi9bg3.gfv.config.Constants;
 import fr.eni.ms2isi9bg3.gfv.domain.Authority;
 import fr.eni.ms2isi9bg3.gfv.domain.User;
+import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
+@Data
 public class UserDTO {
 
 	private Long id;
@@ -40,9 +42,9 @@ public class UserDTO {
 	@Size(max = 256)
 	private String imageUrl;
 
-	private boolean activated = false;
+	private boolean isActivated = false;
 
-	private boolean archived = false;
+	private boolean isArchived = false;
 
 	private String createdBy;
 
@@ -65,8 +67,8 @@ public class UserDTO {
 		this.lastName = user.getLastName();
 		this.email = user.getEmail();
 		this.phoneNumber = user.getPhoneNumber();
-		this.activated = user.isActivated();
-		this.archived = user.isArchived();
+		this.isActivated = user.isActivated();
+		this.isArchived = user.isArchived();
 		this.imageUrl = user.getImageUrl();
 		this.createdBy = user.getCreatedBy();
 		this.createdDate = user.getCreatedDate();
@@ -75,118 +77,6 @@ public class UserDTO {
 		this.authorities = user.getAuthorities().stream()
 						.map(Authority::getName)
 						.collect(Collectors.toSet());
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public boolean isActivated() {
-		return activated;
-	}
-
-	public void setActivated(boolean activated) {
-		this.activated = activated;
-	}
-
-	public boolean isArchived() {
-		return archived;
-	}
-
-	public void setArchived(boolean archived) {
-		this.archived = archived;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Instant getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Instant createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public String getLastModifiedBy() {
-		return lastModifiedBy;
-	}
-
-	public void setLastModifiedBy(String lastModifiedBy) {
-		this.lastModifiedBy = lastModifiedBy;
-	}
-
-	public Instant getLastModifiedDate() {
-		return lastModifiedDate;
-	}
-
-	public void setLastModifiedDate(Instant lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
-	}
-
-	public Set<String> getAuthorities() {
-		return authorities;
-	}
-
-	public void setAuthorities(Set<String> authorities) {
-		this.authorities = authorities;
 	}
 
 	@Override
@@ -198,8 +88,8 @@ public class UserDTO {
 						", email='" + email + '\'' +
 						", phoneNumber='" + phoneNumber + '\'' +
 						", imageUrl='" + imageUrl + '\'' +
-						", activated=" + activated +
-						", archived='" + archived + '\'' +
+						", activated=" + isActivated +
+						", archived='" + isArchived + '\'' +
 						", createdBy=" + createdBy +
 						", createdDate=" + createdDate +
 						", lastModifiedBy='" + lastModifiedBy + '\'' +

@@ -1,5 +1,6 @@
 package fr.eni.ms2isi9bg3.gfv.web.rest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import fr.eni.ms2isi9bg3.gfv.domain.User;
 import fr.eni.ms2isi9bg3.gfv.repository.UserRepository;
@@ -11,8 +12,6 @@ import fr.eni.ms2isi9bg3.gfv.service.dto.UserDTO;
 import fr.eni.ms2isi9bg3.gfv.web.rest.errors.*;
 import fr.eni.ms2isi9bg3.gfv.web.rest.vm.KeyAndPasswordVM;
 import fr.eni.ms2isi9bg3.gfv.web.rest.vm.ManagedUserVM;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +24,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class AccountResource {
 
     private static class AccountResourceException extends RuntimeException {
@@ -32,8 +32,6 @@ public class AccountResource {
             super(message);
         }
     }
-
-    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     private final UserRepository userRepository;
 

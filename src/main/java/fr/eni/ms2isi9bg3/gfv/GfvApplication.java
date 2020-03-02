@@ -65,9 +65,4 @@ public class GfvApplication {
 						env.getActiveProfiles());
 	}
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 }

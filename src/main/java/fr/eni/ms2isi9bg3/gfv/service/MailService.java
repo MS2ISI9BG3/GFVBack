@@ -75,6 +75,7 @@ public class MailService {
 			log.debug("Email doesn't exist for user '{}'", user.getLogin());
 			return;
 		}
+		// TODO setting local dynamically from HttpRequest headers
 		Locale locale = Locale.forLanguageTag("fr");
 		Context context = new Context(locale);
 		context.setVariable(USER, user);

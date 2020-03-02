@@ -235,11 +235,11 @@ public class UserService {
 						.map(UserDTO::new);
 	}
 
-	public void deleteUser(String login) {
+	public void archiveUser(String login) {
 		userRepository.findOneByLogin(login).ifPresent(user -> {
-			userRepository.delete(user);
+			//TODO method to archive a user;
 			this.clearUserCaches(user);
-			log.debug("Deleted User: {}", user);
+			log.debug("Archived User: {}", user);
 		});
 	}
 

@@ -26,14 +26,14 @@
             <column name="email" type="varchar(191)">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
             </column>
-            <column name="phoneNumber" type="varchar(191)">
+            <column name="phone_number" type="varchar(191)">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_phoneNumber"/>
             </column>
             <column name="image_url" type="varchar(256)"/>
-            <column name="activated" type="boolean" valueBoolean="false">
+            <column name="is_activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
-            <column name="archived" type="boolean" valueBoolean="false">
+            <column name="is_archived" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
             <column name="activation_key" type="varchar(20)"/>
@@ -85,8 +85,8 @@
                 file="/db/changelog/data/user.csv"
                 separator=";"
                 tableName="gfv_user">
-            <column name="activated" type="boolean"/>
-            <column name="archived" type="boolean"/>
+            <column name="is_activated" type="boolean"/>
+            <column name="is_archived" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
         <dropDefaultValue tableName="gfv_user" columnName="created_date" columnDataType="datetime"/>

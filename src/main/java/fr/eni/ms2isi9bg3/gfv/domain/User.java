@@ -3,7 +3,6 @@ package fr.eni.ms2isi9bg3.gfv.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.eni.ms2isi9bg3.gfv.config.Constants;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -14,7 +13,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 @Entity
@@ -55,15 +53,15 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
 	@NotNull
 	@Pattern(regexp = Constants.PHONE_NUMBER_REGEX)
-	@Column(name = "phone", nullable = false)
+	@Column(name = "phone_number", nullable = false)
 	private String phoneNumber;
 
 	@NotNull
-	@Column(name = "is_actif", nullable = false)
+	@Column(name = "is_activated", nullable = false)
 	private boolean activated = false;
 
 	@NotNull
-	@Column(name = "is_archive", nullable = false)
+	@Column(name = "is_archived", nullable = false)
 	private boolean archived = false;
 
 	@Size(max = 256)
