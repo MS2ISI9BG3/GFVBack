@@ -59,7 +59,7 @@ public class MailService {
 		try {
 			MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
 			message.setTo(to);
-			message.setFrom(jHipsterProperties.getMail().getFrom());
+			//message.setFrom(jHipsterProperties.getMail().getFrom());
 			message.setSubject(subject);
 			message.setText(content, isHtml);
 			javaMailSender.send(mimeMessage);
@@ -76,7 +76,7 @@ public class MailService {
 			return;
 		}
 		// TODO setting local dynamically from HttpRequest headers
-		Locale locale = Locale.forLanguageTag("fr");
+		Locale locale = Locale.FRENCH;
 		Context context = new Context(locale);
 		context.setVariable(USER, user);
 		context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
