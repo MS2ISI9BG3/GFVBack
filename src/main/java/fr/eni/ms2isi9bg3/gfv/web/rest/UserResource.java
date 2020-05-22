@@ -169,18 +169,4 @@ public class UserResource {
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(UserDTO::new));
     }
-
-    /**
-     * {@code DELETE /users/:login} : delete the "login" User.
-     *
-     * @param login the login of the user to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @PutMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> archiveUser(@PathVariable String login) {
-        log.debug("REST request to archive User: {}", login);
-        //TODO service to archive a user : userService.archiveUser(login);
-        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "userManagement.archived", login)).build();
-    }
 }

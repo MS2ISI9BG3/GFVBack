@@ -35,15 +35,15 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@JsonIgnore
 	@NotNull
 	@Size(min = 60, max = 60)
-	@Column(name = "password_hash", length = 60, nullable = false)
+	@Column(name = "PASSWORD_HASH", length = 60, nullable = false)
 	private String password;
 
 	@Size(max = 50)
-	@Column(name = "first_name", length = 50)
+	@Column(name = "FIRST_NAME", length = 50)
 	private String firstName;
 
 	@Size(max = 50)
-	@Column(name = "last_name", length = 50)
+	@Column(name = "LAST_NAME", length = 50)
 	private String lastName;
 
 	@Email
@@ -53,32 +53,32 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
 	@NotNull
 	@Pattern(regexp = Constants.PHONE_NUMBER_REGEX)
-	@Column(name = "phone_number", nullable = false)
+	@Column(name = "PHONE_NUMBER", nullable = false)
 	private String phoneNumber;
 
 	@NotNull
-	@Column(name = "is_activated", nullable = false)
-	private boolean activated = false;
+	@Column(name = "IS_ACTIVATED", nullable = false)
+	private boolean isActivated = false;
 
 	@NotNull
-	@Column(name = "is_archived", nullable = false)
-	private boolean archived = false;
+	@Column(name = "IS_ARCHIVED", nullable = false)
+	private boolean isArchived = false;
 
 	@Size(max = 256)
-	@Column(name = "image_url", length = 256)
+	@Column(name = "IMAGE_URL", length = 256)
 	private String imageUrl;
 
 	@Size(max = 20)
-	@Column(name = "activation_key", length = 20)
+	@Column(name = "ACTIVATION_KEY", length = 20)
 	@JsonIgnore
 	private String activationKey;
 
 	@Size(max = 20)
-	@Column(name = "reset_key", length = 20)
+	@Column(name = "RESET_KEY", length = 20)
 	@JsonIgnore
 	private String resetKey;
 
-	@Column(name = "reset_date")
+	@Column(name = "RESET_DATE")
 	private Instant resetDate = null;
 
 	@JsonIgnore
@@ -115,8 +115,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
 						", email='" + email + '\'' +
 						", phoneNumber='" + phoneNumber + '\'' +
 						", imageUrl='" + imageUrl + '\'' +
-						", activated='" + activated + '\'' +
-						", archived='" + archived + '\'' +
+						", activated='" + isActivated + '\'' +
+						", archived='" + isArchived + '\'' +
 						", activationKey='" + activationKey + '\'' +
 						"}";
 	}
