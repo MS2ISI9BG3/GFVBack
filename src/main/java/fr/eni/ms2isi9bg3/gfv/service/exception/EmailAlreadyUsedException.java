@@ -1,4 +1,4 @@
-package fr.eni.ms2isi9bg3.gfv.service;
+package fr.eni.ms2isi9bg3.gfv.service.exception;
 
 public class EmailAlreadyUsedException extends RuntimeException {
 

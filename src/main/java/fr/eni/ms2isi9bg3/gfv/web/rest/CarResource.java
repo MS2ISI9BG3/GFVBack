@@ -3,11 +3,14 @@ package fr.eni.ms2isi9bg3.gfv.web.rest;
 import fr.eni.ms2isi9bg3.gfv.domain.Car;
 import fr.eni.ms2isi9bg3.gfv.repository.CarRepository;
 import fr.eni.ms2isi9bg3.gfv.security.AuthoritiesConstants;
+import fr.eni.ms2isi9bg3.gfv.service.CarService;
 import fr.eni.ms2isi9bg3.gfv.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +34,11 @@ public class CarResource {
     private String applicationName;
 
     private final CarRepository carRepository;
+    private final CarService carService;
 
-    public CarResource(CarRepository carRepository) {
+    public CarResource(CarRepository carRepository, CarService carService) {
         this.carRepository = carRepository;
+        this.carService = carService;
     }
 
     /**
@@ -50,7 +55,7 @@ public class CarResource {
         if (car.getCarId() != null) {
             throw new BadRequestAlertException("A new car cannot already have an ID", ENTITY_NAME, "idExists");
         }
-        Car result = carRepository.save(car);
+        Car result = carService.saveCar(car);
         return ResponseEntity.created(new URI("/api/cars/" + result.getCarId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getCarId().toString()))
                 .body(result);
@@ -72,7 +77,7 @@ public class CarResource {
         if (car.getCarId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idNull");
         }
-        Car result = carRepository.save(car);
+        Car result = carService.updateCar(car);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, car.getCarId().toString()))
                 .body(result);
@@ -85,21 +90,44 @@ public class CarResource {
      */
     @GetMapping("/cars")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public List<Car> getAllCars() {
+    public ResponseEntity<List<Car>> getAllCars(final Pageable pageable) {
         log.debug("REST request to get all Cars");
-        return carRepository.findAll();
+        List<Car> cars = carRepository.findAll();
+        return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
     /**
-     * {@code GET  /cars} : get all the cars.
+     * {@code GET  /cars/available} : get all the cars.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of available cars in body.
      */
     @GetMapping("/cars/available")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
-    public List<Car> getAllAvailableCars() {
+    public List<Car> getAvailableCars() {
         log.debug("REST request to get all available Cars");
-        return carRepository.findAllByAvailableTrue();
+        return carRepository.findAvailableCars();
+    }
+
+    /**
+     * {@code GET  /cars/sites/:siteId} : get all the cars by site.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of available cars in body.
+     */
+    @GetMapping("/cars/sites/{siteId}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public List<Car> getCarsBySite(@PathVariable Long siteId) {
+        log.debug("REST request to get all Cars by Site : {}", siteId);
+        return carRepository.findCarsBySite(siteId);
+    }
+
+    /**
+     * {@code GET  /cars/available/sites/:siteId} : get all available cars by site.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of available cars in body.
+     */
+    @GetMapping("/cars/available/sites/{siteId}")
+    public List<Car> getAvailableCarsBySite(@PathVariable Long siteId) {
+        log.debug("REST request to get all Cars by Site : {}", siteId);
+        return carRepository.findAvailableCarsBySite(siteId);
     }
 
     /**
@@ -109,7 +137,7 @@ public class CarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the car, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/cars/{id}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Car> getCar(@PathVariable Long id) {
         log.debug("REST request to get Car : {}", id);
         Optional<Car> car = carRepository.findById(id);
