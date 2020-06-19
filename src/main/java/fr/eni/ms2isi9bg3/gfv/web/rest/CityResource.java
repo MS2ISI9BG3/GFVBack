@@ -38,7 +38,7 @@ public class CityResource {
     }
 
     @PostMapping("/cities")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<City> createCity(@Valid @RequestBody City city) throws URISyntaxException {
         log.debug("REST request to save City : {}", city);
         if (city.getCityId() != null) {
@@ -51,7 +51,7 @@ public class CityResource {
     }
 
     @PutMapping("/cities")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<City> updateCity(@Valid @RequestBody City city) throws URISyntaxException {
         log.debug("REST request to update City : {}", city);
         if (city.getCityId() == null) {

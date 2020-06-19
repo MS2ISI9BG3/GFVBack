@@ -44,7 +44,7 @@ public class CarModelResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/models")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CarModel> createModel(@Valid @RequestBody CarModel model) throws URISyntaxException {
         log.debug("REST request to save Model : {}", model);
         if (model.getModelId() != null) {
@@ -67,7 +67,7 @@ public class CarModelResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/models")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CarModel> updateModel(@Valid @RequestBody CarModel model) throws URISyntaxException {
         log.debug("REST request to update model : {}", model);
         if (model.getModelId() == null) {

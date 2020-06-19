@@ -64,7 +64,7 @@ public class UnavailabilityResource {
     }
 
     @GetMapping("/unavailability")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<Unavailability> getAllUnavailability() {
         log.debug("REST request to get all Unavailability");
         return unavailabilityRepository.findAll();
@@ -79,7 +79,7 @@ public class UnavailabilityResource {
     }
 
     @GetMapping("/carUnavailability/{id}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<Unavailability> getCarUnavailability(@PathVariable Long id) {
         log.debug("REST request to get Car Unavailability : {}", id);
         return unavailabilityRepository.findAllCarUnavailability(id);

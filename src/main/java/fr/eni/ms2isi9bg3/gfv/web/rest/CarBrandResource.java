@@ -43,7 +43,7 @@ public class CarBrandResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/brands")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CarBrand> createBrand(@Valid @RequestBody CarBrand brand) throws URISyntaxException {
         log.debug("REST request to save Brand : {}", brand);
         if (brand.getBrandId() != null) {
@@ -66,7 +66,7 @@ public class CarBrandResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/brands")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CarBrand> updateBrand(@Valid @RequestBody CarBrand brand) throws URISyntaxException {
         log.debug("REST request to update brand : {}", brand);
         if (brand.getBrandId() == null) {

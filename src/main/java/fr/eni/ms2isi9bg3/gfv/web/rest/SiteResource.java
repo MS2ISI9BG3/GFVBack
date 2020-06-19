@@ -38,7 +38,7 @@ public class SiteResource {
     }
 
     @PostMapping("/sites")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Site> createSite(@Valid @RequestBody Site site) throws URISyntaxException {
         log.debug("REST request to save Site : {}", site);
         if (site.getSiteId() != null) {
@@ -51,7 +51,7 @@ public class SiteResource {
     }
 
     @PutMapping("/sites")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Site> updateSite(@Valid @RequestBody Site site) throws URISyntaxException {
         log.debug("REST request to update Site : {}", site);
         if (site.getSiteId() == null) {
