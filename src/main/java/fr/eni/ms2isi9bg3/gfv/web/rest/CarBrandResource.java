@@ -3,6 +3,7 @@ package fr.eni.ms2isi9bg3.gfv.web.rest;
 import fr.eni.ms2isi9bg3.gfv.domain.CarBrand;
 import fr.eni.ms2isi9bg3.gfv.repository.CarBrandRepository;
 import fr.eni.ms2isi9bg3.gfv.security.AuthoritiesConstants;
+import fr.eni.ms2isi9bg3.gfv.service.CarBrandService;
 import fr.eni.ms2isi9bg3.gfv.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +30,11 @@ public class CarBrandResource {
     private String applicationName;
 
     private final CarBrandRepository carBrandRepository;
+    private final CarBrandService carBrandService;
 
-    public CarBrandResource(CarBrandRepository carBrandRepository) {
+    public CarBrandResource(CarBrandRepository carBrandRepository, CarBrandService carBrandService) {
         this.carBrandRepository = carBrandRepository;
+        this.carBrandService = carBrandService;
     }
 
     /**
@@ -49,7 +52,7 @@ public class CarBrandResource {
         if (brand.getBrandId() != null) {
             throw new BadRequestAlertException("A new brand cannot already have an ID", ENTITY_NAME, "idExists");
         }
-        CarBrand result = carBrandRepository.save(brand);
+        CarBrand result = carBrandService.saveCarBrand(brand);
         return ResponseEntity.created(new URI("/api/brands/" + result.getBrandId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true,
                         ENTITY_NAME, result.getBrandId().toString()))
@@ -72,7 +75,7 @@ public class CarBrandResource {
         if (brand.getBrandId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idNull");
         }
-        CarBrand result = carBrandRepository.save(brand);
+        CarBrand result = carBrandService.updateCarBrand(brand);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, brand.getBrandId().toString()))
                 .body(result);
@@ -87,5 +90,16 @@ public class CarBrandResource {
     public List<CarBrand> getAllBrands() {
         log.debug("REST request to get all brands");
         return carBrandRepository.findAllByOrderByBrandNameAsc();
+    }
+
+    /**
+     * {@code GET  /brands/available} : get available the brands.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of brands in body.
+     */
+    @GetMapping("/brands/available")
+    public List<CarBrand> getAvailableBrands() {
+        log.debug("REST request to get all brands");
+        return carBrandRepository.findAvailableCarBrands();
     }
 }

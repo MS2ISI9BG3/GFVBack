@@ -1,9 +1,9 @@
 package fr.eni.ms2isi9bg3.gfv.web.rest;
 
-import fr.eni.ms2isi9bg3.gfv.domain.CarBrand;
 import fr.eni.ms2isi9bg3.gfv.domain.CarModel;
 import fr.eni.ms2isi9bg3.gfv.repository.CarModelRepository;
 import fr.eni.ms2isi9bg3.gfv.security.AuthoritiesConstants;
+import fr.eni.ms2isi9bg3.gfv.service.CarModelService;
 import fr.eni.ms2isi9bg3.gfv.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +30,11 @@ public class CarModelResource {
     private String applicationName;
 
     private final CarModelRepository carModelRepository;
+    private final CarModelService carModelService;
 
-    public CarModelResource(CarModelRepository carModelRepository) {
+    public CarModelResource(CarModelRepository carModelRepository, CarModelService carModelService) {
         this.carModelRepository = carModelRepository;
+        this.carModelService = carModelService;
     }
 
     /**
@@ -50,7 +52,7 @@ public class CarModelResource {
         if (model.getModelId() != null) {
             throw new BadRequestAlertException("A new model cannot already have an ID", ENTITY_NAME, "idExists");
         }
-        CarModel result = carModelRepository.save(model);
+        CarModel result = carModelService.saveCarModel(model);
         return ResponseEntity.created(new URI("/api/brands/" + result.getModelId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true,
                         ENTITY_NAME, result.getModelId().toString()))
@@ -73,7 +75,7 @@ public class CarModelResource {
         if (model.getModelId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idNull");
         }
-        CarModel result = carModelRepository.save(model);
+        CarModel result = carModelService.updateCarModel(model);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, model.getModelId().toString()))
                 .body(result);
@@ -91,13 +93,24 @@ public class CarModelResource {
     }
 
     /**
-     * {@code GET  /models} : get all the models.
+     * {@code GET  /models} : get available the models.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of models in body.
      */
-    @GetMapping("/models/{id}")
-    public List<CarModel> getAllModelsByBrand(@PathVariable Long id) {
-        log.debug("REST request to get all models");
-        return carModelRepository.findAllByCarBrandBrandIdOrderByModelNameAsc(id);
+    @GetMapping("/models/available")
+    public List<CarModel> getAvailableModels() {
+        log.debug("REST request to get available models");
+        return carModelRepository.findAvailableCarModels();
+    }
+
+    /**
+     * {@code GET  /models/available/{id}} : get available models for a given brand.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of models in body.
+     */
+    @GetMapping("/models/available/{id}")
+    public List<CarModel> getAvailableModelsByBrand(@PathVariable Long id) {
+        log.debug("REST request to get available models for a given Brand");
+        return carModelService.findAvailableModelByBrand(id);
     }
 }

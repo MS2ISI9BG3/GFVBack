@@ -70,6 +70,13 @@ public class SiteResource {
         return new ResponseEntity<>(site, HttpStatus.OK);
     }
 
+    @GetMapping("/sites/available")
+    public ResponseEntity<List<Site>> getAvailableSites() {
+        log.debug("REST request to get Available Sites");
+        List<Site> site = siteRepository.findAllByArchivedIsFalse();
+        return new ResponseEntity<>(site, HttpStatus.OK);
+    }
+
     @GetMapping("/sites/{id}")
     public ResponseEntity<Site> getSite(@PathVariable Long id) {
         log.debug("REST request to get Site : {}", id);

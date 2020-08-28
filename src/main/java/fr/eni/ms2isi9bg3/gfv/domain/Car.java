@@ -36,11 +36,11 @@ public class Car extends AbstractAuditingEntity {
     private int odometer;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date insuranceValidityDate;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date serviceValidityDate;
 
     @NotNull

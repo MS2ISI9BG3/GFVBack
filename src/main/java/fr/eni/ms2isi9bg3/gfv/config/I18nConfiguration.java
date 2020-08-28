@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
+import java.util.Locale;
+
 /**
  * Configuration class for i18n files
  */
@@ -17,11 +19,13 @@ public class I18nConfiguration {
     @Bean
     @Description("Spring message resolver")
     public ReloadableResourceBundleMessageSource messageSource() {
+        Locale locale = Locale.FRENCH;
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames("classpath:i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         messageSource.setFallbackToSystemLocale(false);
+        messageSource.setDefaultLocale(locale);
         return messageSource;
     }
 

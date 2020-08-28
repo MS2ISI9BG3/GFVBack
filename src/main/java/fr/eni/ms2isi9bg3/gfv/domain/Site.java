@@ -30,6 +30,6 @@ public class Site extends AbstractAuditingEntity {
 
     @NotNull
     @Column(name = "IS_ARCHIVED", nullable = false)
-    private boolean isArchived = false;
+    private boolean archived = false;
 
 }
