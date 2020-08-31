@@ -39,11 +39,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	private String password;
 
 	@Size(max = 50)
-	@Column(name = "FIRST_NAME", length = 50)
+	@Column(name = "firstName", length = 50)
 	private String firstName;
 
 	@Size(max = 50)
-	@Column(name = "LAST_NAME", length = 50)
+	@Column(name = "lastName", length = 50)
 	private String lastName;
 
 	@Email
@@ -53,32 +53,32 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
 	@NotNull
 	@Pattern(regexp = Constants.PHONE_NUMBER_REGEX)
-	@Column(name = "PHONE_NUMBER", nullable = false)
+	@Column(name = "phoneNumber", nullable = false)
 	private String phoneNumber;
 
 	@NotNull
-	@Column(name = "IS_ACTIVATED", nullable = false)
+	@Column(name = "isActivated", nullable = false)
 	private boolean isActivated = false;
 
 	@NotNull
-	@Column(name = "IS_ARCHIVED", nullable = false)
+	@Column(name = "isArchived", nullable = false)
 	private boolean isArchived = false;
 
 	@Size(max = 256)
-	@Column(name = "IMAGE_URL", length = 256)
+	@Column(name = "imageUrl", length = 256)
 	private String imageUrl;
 
 	@Size(max = 20)
-	@Column(name = "ACTIVATION_KEY", length = 20)
+	@Column(name = "activationKey", length = 20)
 	@JsonIgnore
 	private String activationKey;
 
 	@Size(max = 20)
-	@Column(name = "RESET_KEY", length = 20)
+	@Column(name = "resetKey", length = 20)
 	@JsonIgnore
 	private String resetKey;
 
-	@Column(name = "RESET_DATE")
+	@Column(name = "resetDate")
 	private Instant resetDate = null;
 
 	@JsonIgnore

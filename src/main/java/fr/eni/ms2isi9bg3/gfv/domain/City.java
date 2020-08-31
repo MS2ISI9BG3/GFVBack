@@ -14,11 +14,11 @@ public class City {
     private Long cityId;
 
     @NotNull
-    @Column(name = "CITY_NAME", nullable = false)
+    @Column(name = "cityNmae", nullable = false)
     private String cityName;
 
     @NotNull
-    @Column(name = "CITY_ZIP_CODE", nullable = false)
+    @Column(name = "cityZipCode", nullable = false)
     private String cityZipCode;
 
 }

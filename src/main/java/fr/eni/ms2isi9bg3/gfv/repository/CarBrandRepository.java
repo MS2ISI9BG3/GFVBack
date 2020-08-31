@@ -12,8 +12,5 @@ public interface CarBrandRepository extends JpaRepository<CarBrand, Long> {
 
     List<CarBrand> findAllByOrderByBrandNameAsc();
 
-    @Query("SELECT cb FROM CarBrand cb " +
-            "WHERE cb.status = fr.eni.ms2isi9bg3.gfv.enums.CommonStatus.AVAILABLE " +
-            "ORDER BY cb.brandName")
-    List<CarBrand> findAvailableCarBrands();
+    List<CarBrand> findAllByArchivedIsFalse();
 }

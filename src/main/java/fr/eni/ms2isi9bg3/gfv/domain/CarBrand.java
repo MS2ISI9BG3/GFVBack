@@ -17,7 +17,8 @@ public class CarBrand {
     @NotNull
     private String brandName;
 
-    @Enumerated(EnumType.STRING)
-    private CommonStatus status;
+    @NotNull
+    @Column(name = "isArchived", nullable = false)
+    private boolean archived = false;
 
 }

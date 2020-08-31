@@ -1,11 +1,11 @@
 package fr.eni.ms2isi9bg3.gfv.service;
-
+/*
 import fr.eni.ms2isi9bg3.gfv.domain.CarBrand;
 import fr.eni.ms2isi9bg3.gfv.enums.CommonStatus;
 import fr.eni.ms2isi9bg3.gfv.repository.CarBrandRepository;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class CarBrandService {
     private final CarBrandRepository carBrandRepository;
 
@@ -28,3 +28,4 @@ public class CarBrandService {
         return carBrand;
     }
 }
+*/

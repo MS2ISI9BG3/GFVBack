@@ -52,7 +52,7 @@ public class CarModelResource {
         if (model.getModelId() != null) {
             throw new BadRequestAlertException("A new model cannot already have an ID", ENTITY_NAME, "idExists");
         }
-        CarModel result = carModelService.saveCarModel(model);
+        CarModel result = carModelRepository.save(model);
         return ResponseEntity.created(new URI("/api/brands/" + result.getModelId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true,
                         ENTITY_NAME, result.getModelId().toString()))
@@ -75,7 +75,7 @@ public class CarModelResource {
         if (model.getModelId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idNull");
         }
-        CarModel result = carModelService.updateCarModel(model);
+        CarModel result = carModelRepository.save(model);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, model.getModelId().toString()))
                 .body(result);
@@ -100,7 +100,7 @@ public class CarModelResource {
     @GetMapping("/models/available")
     public List<CarModel> getAvailableModels() {
         log.debug("REST request to get available models");
-        return carModelRepository.findAvailableCarModels();
+        return carModelRepository.findAllByArchivedIsFalse();
     }
 
     /**

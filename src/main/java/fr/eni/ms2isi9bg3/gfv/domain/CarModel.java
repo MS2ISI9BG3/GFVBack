@@ -18,9 +18,10 @@ public class CarModel {
     private String modelName;
 
     @ManyToOne
-    @JoinColumn(name = "CAR_BRAND_ID")
+    @JoinColumn(name = "carBrandId")
     private CarBrand carBrand;
 
-    @Enumerated(EnumType.STRING)
-    private CommonStatus status;
+    @NotNull
+    @Column(name = "isArchived", nullable = false)
+    private boolean archived = false;
 }

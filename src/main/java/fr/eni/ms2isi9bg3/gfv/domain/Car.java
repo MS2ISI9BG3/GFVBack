@@ -45,20 +45,20 @@ public class Car extends AbstractAuditingEntity {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "CAR_BRAND_ID", nullable = false)
+    @JoinColumn(name = "carBrandId", nullable = false)
     private CarBrand carBrand;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "CAR_MODEL_ID", nullable = false)
+    @JoinColumn(name = "carModelId", nullable = false)
     private CarModel carModel;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "CAR_SITE_ID", nullable = false)
+    @JoinColumn(name = "carSiteId", nullable = false)
     private Site carSite;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "CAR_STATUS")
+    @Column(name = "carStatus")
     private CarStatus carStatus;
 }

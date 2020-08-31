@@ -25,6 +25,6 @@ public class Unavailability extends AbstractAuditingEntity {
     private Date end_date;
 
     @ManyToOne
-    @JoinColumn(name = "CAR_ID")
+    @JoinColumn(name = "carId")
     private Car car;
 }

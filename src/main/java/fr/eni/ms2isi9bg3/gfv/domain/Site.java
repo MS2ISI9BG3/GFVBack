@@ -16,20 +16,20 @@ public class Site extends AbstractAuditingEntity {
     private Long siteId;
 
     @NotNull
-    @Column(name = "SITE_NAME", nullable = false)
+    @Column(name = "siteName", nullable = false)
     private String siteName;
 
     @NotNull
-    @Column(name = "SITE_ADDRESS", nullable = false)
+    @Column(name = "siteAddress", nullable = false)
     private String siteAddress;
 
     @NotNull
     @Pattern(regexp = Constants.PHONE_NUMBER_REGEX)
-    @Column(name = "SITE_PHONE_NUMBER", nullable = false)
+    @Column(name = "sitePhoneNumber", nullable = false)
     private String sitePhoneNumber;
 
     @NotNull
-    @Column(name = "IS_ARCHIVED", nullable = false)
+    @Column(name = "isArchived", nullable = false)
     private boolean archived = false;
 
 }
