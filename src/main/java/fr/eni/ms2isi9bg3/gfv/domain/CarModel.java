@@ -1,6 +1,5 @@
 package fr.eni.ms2isi9bg3.gfv.domain;
 
-import fr.eni.ms2isi9bg3.gfv.enums.CommonStatus;
 import lombok.Data;
 
 import javax.persistence.*;

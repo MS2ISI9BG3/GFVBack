@@ -31,5 +31,12 @@ public class Ride {
     @ManyToOne
     @JoinColumn(name = "arrivalSiteId", nullable = false)
     private Site arrivalSite;
+
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "carId", nullable = false)
+    private Car car;
+
+    private String description;
 }
 */

@@ -5,6 +5,7 @@ import fr.eni.ms2isi9bg3.gfv.repository.CarBrandRepository;
 import fr.eni.ms2isi9bg3.gfv.security.AuthoritiesConstants;
 import fr.eni.ms2isi9bg3.gfv.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -87,6 +89,18 @@ public class CarBrandResource {
     public List<CarBrand> getAllBrands() {
         log.debug("REST request to get all brands");
         return carBrandRepository.findAllByOrderByBrandNameAsc();
+    }
+
+    /**
+     * {@code GET  /brands/{id}} : get a given brand.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the given brand in body.
+     */
+    @GetMapping("/brands/{id}")
+    public ResponseEntity<CarBrand> getBrand(@PathVariable Long id) {
+        log.debug("REST request to get a given brand by ID : {}", id);
+        Optional<CarBrand> carBrand = carBrandRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(carBrand);
     }
 
     /**

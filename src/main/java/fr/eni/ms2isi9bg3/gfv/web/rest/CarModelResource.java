@@ -6,6 +6,7 @@ import fr.eni.ms2isi9bg3.gfv.security.AuthoritiesConstants;
 import fr.eni.ms2isi9bg3.gfv.service.CarModelService;
 import fr.eni.ms2isi9bg3.gfv.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -90,6 +92,18 @@ public class CarModelResource {
     public List<CarModel> getAllModels() {
         log.debug("REST request to get all models");
         return carModelRepository.findAll();
+    }
+
+    /**
+     * {@code GET  /brands/{id}} : get a given model.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the given model in body.
+     */
+    @GetMapping("/models/{id}")
+    public ResponseEntity<CarModel> getModel(@PathVariable Long id) {
+        log.debug("REST request to get a given model by ID : {}", id);
+        Optional<CarModel> carModel = carModelRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(carModel);
     }
 
     /**
