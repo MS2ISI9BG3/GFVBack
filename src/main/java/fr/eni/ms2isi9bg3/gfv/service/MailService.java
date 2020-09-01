@@ -1,5 +1,6 @@
 package fr.eni.ms2isi9bg3.gfv.service;
 
+import fr.eni.ms2isi9bg3.gfv.domain.Booking;
 import io.github.jhipster.config.JHipsterProperties;
 import fr.eni.ms2isi9bg3.gfv.domain.User;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Service for sending emails.
@@ -31,6 +33,11 @@ public class MailService {
 	private static final String USER = "user";
 
 	private static final String BASE_URL = "baseUrl";
+
+	private static final String ADMIN_EMAIL = "donald.ndizeye@gmail.com";
+
+	// TODO setting local dynamically from HttpRequest headers
+	private static final Locale LOCAL = Locale.FRENCH;
 
 	private final JHipsterProperties jHipsterProperties;
 
@@ -75,14 +82,23 @@ public class MailService {
 			log.debug("Email doesn't exist for user '{}'", user.getLogin());
 			return;
 		}
-		// TODO setting local dynamically from HttpRequest headers
-		Locale locale = Locale.FRENCH;
-		Context context = new Context(locale);
+
+		Context context = new Context(LOCAL);
 		context.setVariable(USER, user);
 		context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 		String content = templateEngine.process(templateName, context);
-		String subject = messageSource.getMessage(titleKey, null, locale);
+		String subject = messageSource.getMessage(titleKey, null, LOCAL);
 		sendEmail(user.getEmail(), subject, content, false, true);
+	}
+
+	@Async
+	public void sendNotificationToAdmin(User user, String templateName, String titleKey) {
+		Context context = new Context(LOCAL);
+		context.setVariable(USER, user);
+		context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+		String content = templateEngine.process(templateName, context);
+		String subject = messageSource.getMessage(titleKey, null, LOCAL);
+		sendEmail(ADMIN_EMAIL, subject, content, false, true);
 	}
 
 	@Async
@@ -101,5 +117,11 @@ public class MailService {
 	public void sendPasswordResetMail(User user) {
 		log.debug("Sending password reset email to '{}'", user.getEmail());
 		sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+	}
+
+	@Async
+	public void sendBookingNotification(Optional<User> user) {
+		log.debug("Sending booking notification email to the admin");
+		sendNotificationToAdmin(user.get(), "mail/bookingNotification", "email.booking.title");
 	}
 }

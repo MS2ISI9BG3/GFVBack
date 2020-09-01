@@ -9,6 +9,7 @@ import fr.eni.ms2isi9bg3.gfv.repository.CarRepository;
 import fr.eni.ms2isi9bg3.gfv.service.exception.RegistrationNumberAlreadyUsedException;
 import fr.eni.ms2isi9bg3.gfv.service.exception.VinAlreadyUsedException;
 import org.springframework.stereotype.Service;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
 import java.util.Optional;
@@ -66,6 +67,11 @@ public class CarService {
         car.setCarStatus(car.getCarStatus());
         carRepository.save(car);
         return car;
+    }
+
+    public void updateCarStatus(Car car, CarStatus status) {
+        car.setCarStatus(status);
+        carRepository.save(car);
     }
 
     private void setCarProperties(Car car, int power, int numberOfSeats, int odometer, Date insuranceValidityDate, Date serviceValidityDate, CarBrand carBrand, CarModel carModel, Site carSite) {
