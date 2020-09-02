@@ -30,10 +30,10 @@
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_phoneNumber"/>
             </column>
             <column name="image_url" type="varchar(256)"/>
-            <column name="is_activated" type="boolean" valueBoolean="false">
+            <column name="is_activated" type="boolean" valueBoolean="false" defaultValue="false">
                 <constraints nullable="false" />
             </column>
-            <column name="is_archived" type="boolean" valueBoolean="false">
+            <column name="is_archived" type="boolean" valueBoolean="false" defaultValue="false">
                 <constraints nullable="false" />
             </column>
             <column name="activation_key" type="varchar(20)"/>

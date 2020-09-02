@@ -42,9 +42,9 @@ public class UserDTO {
 	@Size(max = 256)
 	private String imageUrl;
 
-	private boolean isActivated = false;
+	private boolean activated = false;
 
-	private boolean isArchived = false;
+	private boolean archived = false;
 
 	private String createdBy;
 
@@ -67,8 +67,8 @@ public class UserDTO {
 		this.lastName = user.getLastName();
 		this.email = user.getEmail();
 		this.phoneNumber = user.getPhoneNumber();
-		this.isActivated = user.isActivated();
-		this.isArchived = user.isArchived();
+		this.activated = user.isActivated();
+		this.archived = user.isArchived();
 		this.imageUrl = user.getImageUrl();
 		this.createdBy = user.getCreatedBy();
 		this.createdDate = user.getCreatedDate();
@@ -88,8 +88,8 @@ public class UserDTO {
 						", email='" + email + '\'' +
 						", phoneNumber='" + phoneNumber + '\'' +
 						", imageUrl='" + imageUrl + '\'' +
-						", activated=" + isActivated +
-						", archived='" + isArchived + '\'' +
+						", activated=" + activated +
+						", archived='" + archived + '\'' +
 						", createdBy=" + createdBy +
 						", createdDate=" + createdDate +
 						", lastModifiedBy='" + lastModifiedBy + '\'' +

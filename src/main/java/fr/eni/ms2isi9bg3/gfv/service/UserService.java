@@ -117,7 +117,7 @@ public class UserService {
         // new user is not active
         newUser.setActivated(false);
         // new user is not archived
-        newUser.setArchived(false);
+        newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
@@ -293,7 +293,7 @@ public class UserService {
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
         userRepository
-                .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
+                .findAllByActivatedFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
                 .forEach(user -> {
                     log.debug("Deleting not activated user {}", user.getLogin());
                     userRepository.delete(user);
