@@ -46,24 +46,30 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "lastName", length = 50)
 	private String lastName;
 
+	@JsonIgnore
 	@Email
 	@Size(min = 5, max = 254)
 	@Column(length = 254, unique = true)
 	private String email;
 
+	@JsonIgnore
 	@NotNull
 	@Pattern(regexp = Constants.PHONE_NUMBER_REGEX)
 	@Column(name = "phoneNumber", nullable = false)
 	private String phoneNumber;
 
-	@NotNull
-	@Column(name = "isActivated", nullable = false)
-	private boolean isActivated = false;
 
 	@NotNull
-	@Column(name = "isArchived", nullable = false)
-	private boolean isArchived = false;
+	@Column(name = "activated", nullable = false)
+	@JsonIgnore
+	private boolean activated = false;
 
+	@NotNull
+	@Column(name = "archived", nullable = false)
+	@JsonIgnore
+	private boolean archived = false;
+
+	@JsonIgnore
 	@Size(max = 256)
 	@Column(name = "imageUrl", length = 256)
 	private String imageUrl;
@@ -78,6 +84,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@JsonIgnore
 	private String resetKey;
 
+	@JsonIgnore
 	@Column(name = "resetDate")
 	private Instant resetDate = null;
 
@@ -115,8 +122,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
 						", email='" + email + '\'' +
 						", phoneNumber='" + phoneNumber + '\'' +
 						", imageUrl='" + imageUrl + '\'' +
-						", activated='" + isActivated + '\'' +
-						", archived='" + isArchived + '\'' +
+						", activated='" + activated + '\'' +
+						", archived='" + archived + '\'' +
 						", activationKey='" + activationKey + '\'' +
 						"}";
 	}

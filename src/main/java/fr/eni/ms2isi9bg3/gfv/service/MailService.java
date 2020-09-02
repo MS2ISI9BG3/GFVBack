@@ -1,5 +1,6 @@
 package fr.eni.ms2isi9bg3.gfv.service;
 
+import fr.eni.ms2isi9bg3.gfv.config.Constants;
 import fr.eni.ms2isi9bg3.gfv.domain.Booking;
 import io.github.jhipster.config.JHipsterProperties;
 import fr.eni.ms2isi9bg3.gfv.domain.User;
@@ -34,10 +35,8 @@ public class MailService {
 
 	private static final String BASE_URL = "baseUrl";
 
+	// TODO to be define in app properties
 	private static final String ADMIN_EMAIL = "donald.ndizeye@gmail.com";
-
-	// TODO setting local dynamically from HttpRequest headers
-	private static final Locale LOCAL = Locale.FRENCH;
 
 	private final JHipsterProperties jHipsterProperties;
 
@@ -83,21 +82,22 @@ public class MailService {
 			return;
 		}
 
-		Context context = new Context(LOCAL);
+		Context context = new Context(Constants.DEFAULT_LOCAL);
 		context.setVariable(USER, user);
 		context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 		String content = templateEngine.process(templateName, context);
-		String subject = messageSource.getMessage(titleKey, null, LOCAL);
+		String subject = messageSource.getMessage(titleKey, null, Constants.DEFAULT_LOCAL);
 		sendEmail(user.getEmail(), subject, content, false, true);
 	}
 
 	@Async
 	public void sendNotificationToAdmin(User user, String templateName, String titleKey) {
-		Context context = new Context(LOCAL);
+		Context context;
+		context = new Context(Constants.DEFAULT_LOCAL);
 		context.setVariable(USER, user);
 		context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 		String content = templateEngine.process(templateName, context);
-		String subject = messageSource.getMessage(titleKey, null, LOCAL);
+		String subject = messageSource.getMessage(titleKey, null, Constants.DEFAULT_LOCAL);
 		sendEmail(ADMIN_EMAIL, subject, content, false, true);
 	}
 

@@ -1,6 +1,5 @@
 package fr.eni.ms2isi9bg3.gfv.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -39,4 +38,9 @@ public class Booking extends AbstractAuditingEntity {
     private Car car;
 
     private String description;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "userLogin", nullable = false)
+    private User user;
 }

@@ -95,7 +95,7 @@ public class CarModelResource {
     }
 
     /**
-     * {@code GET  /brands/{id}} : get a given model.
+     * {@code GET  /brands/:id} : get a given model.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the given model in body.
      */
@@ -118,7 +118,7 @@ public class CarModelResource {
     }
 
     /**
-     * {@code GET  /models/available/{id}} : get available models for a given brand.
+     * {@code GET  /models/available/:id} : get available models for a given brand.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of models in body.
      */

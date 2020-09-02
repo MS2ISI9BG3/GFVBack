@@ -1,13 +1,14 @@
 package fr.eni.ms2isi9bg3.gfv.service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import fr.eni.ms2isi9bg3.gfv.config.Constants;
 import fr.eni.ms2isi9bg3.gfv.domain.Booking;
 import fr.eni.ms2isi9bg3.gfv.domain.Car;
+import fr.eni.ms2isi9bg3.gfv.domain.User;
 import fr.eni.ms2isi9bg3.gfv.enums.CarStatus;
 import fr.eni.ms2isi9bg3.gfv.repository.BookingRepository;
 import fr.eni.ms2isi9bg3.gfv.repository.CarRepository;
+import fr.eni.ms2isi9bg3.gfv.repository.UserRepository;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,12 +18,19 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final CarRepository carRepository;
     private final CarService carService;
+    private final MessageSource messageSource;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public BookingService(BookingRepository bookingRepository, CarRepository carRepository
-            , CarService carService) {
+    public BookingService(BookingRepository bookingRepository, CarRepository carRepository,
+                          CarService carService, MessageSource messageSource, UserRepository userRepository,
+                          UserService userService) {
         this.bookingRepository = bookingRepository;
         this.carRepository = carRepository;
         this.carService = carService;
+        this.messageSource = messageSource;
+        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public Booking createBooking (Booking booking) {
@@ -39,6 +47,10 @@ public class BookingService {
 
         newBooking.setCar(booking.getCar());
         newBooking.setDescription(booking.getDescription());
+
+        Optional<User> bkUser = userRepository.findOneByLogin(booking.getUser().getLogin());
+        newBooking.setUser(bkUser.get());
+
         bookingRepository.save(newBooking);
         return newBooking;
     }
@@ -62,6 +74,10 @@ public class BookingService {
 
         booking.setCar(booking.getCar());
         booking.setDescription(booking.getDescription());
+
+        Optional<User> bkUser = userRepository.findOneByLogin(booking.getUser().getLogin());
+        booking.setUser(bkUser.get());
+
         bookingRepository.save(booking);
         return booking;
     }
@@ -83,6 +99,22 @@ public class BookingService {
         carService.updateCarStatus(carToBeReserved.get(), CarStatus.RESERVED);
 
         String regNum = carToBeReserved.get().getRegistrationNumber().toUpperCase();
-        return "CAR WITH REG N° " + regNum + " RESERVED";
+        final String[] params = new String[]{regNum};
+        String msg = messageSource.getMessage("booking.notification.reserved", params,null, Constants.DEFAULT_LOCAL);
+        return msg;
+    }
+
+    public String bookingRefused(Booking booking) {
+
+        Optional<Car> carToBeReserved = carRepository.findOneByCarId(booking.getCar().getCarId());
+        if (!carToBeReserved.isPresent()) {
+            throw new RuntimeException("Car with id " + carToBeReserved.get().getCarId() + " does not exist");
+        }
+        carService.updateCarStatus(carToBeReserved.get(), CarStatus.AVAILABLE);
+
+        String regNum = carToBeReserved.get().getRegistrationNumber().toUpperCase();
+        final String[] params = new String[]{regNum};
+        String msg = messageSource.getMessage("booking.notification.refused", params,null, Constants.DEFAULT_LOCAL);
+        return msg;
     }
 }

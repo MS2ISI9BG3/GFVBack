@@ -92,7 +92,7 @@ public class CarBrandResource {
     }
 
     /**
-     * {@code GET  /brands/{id}} : get a given brand.
+     * {@code GET  /brands/:id} : get a given brand.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the given brand in body.
      */
