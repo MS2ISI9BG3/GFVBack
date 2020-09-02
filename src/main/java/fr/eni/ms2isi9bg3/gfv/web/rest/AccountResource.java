@@ -1,5 +1,6 @@
 package fr.eni.ms2isi9bg3.gfv.web.rest;
 
+import io.github.jhipster.web.util.HeaderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import fr.eni.ms2isi9bg3.gfv.domain.User;
@@ -13,10 +14,13 @@ import fr.eni.ms2isi9bg3.gfv.web.rest.errors.*;
 import fr.eni.ms2isi9bg3.gfv.web.rest.vm.KeyAndPasswordVM;
 import fr.eni.ms2isi9bg3.gfv.web.rest.vm.ManagedUserVM;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 /**
@@ -56,12 +60,15 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public ResponseEntity<User> registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM)
+            throws URISyntaxException {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
+        return ResponseEntity.created(new URI("/api/users/" + user.getLogin()))
+                .body(user);
     }
 
     /**
