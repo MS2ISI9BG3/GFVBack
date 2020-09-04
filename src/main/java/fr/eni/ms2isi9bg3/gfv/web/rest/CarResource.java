@@ -146,13 +146,8 @@ public class CarResource {
     @PutMapping("/cars/archive/{id}")
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Map carArchived(@PathVariable Long id) {
-        log.debug("REST request to get Car : {}", id, " archived");
-        Map map = new HashMap();
-        String[] response = carService.carArchived(id);
-        for (String rsp: response) {
-            map.put("message", response[0]);
-            map.put("status", response[1]);
-        }
-        return map;
+        log.debug("REST request to get Car ID : {} archived", id);
+        Map response = carService.carArchived(id);
+        return response;
     }
 }

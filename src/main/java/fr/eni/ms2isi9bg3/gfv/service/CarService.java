@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -78,25 +80,29 @@ public class CarService {
         carRepository.save(car);
     }
 
-    public String[] carArchived(Long id) {
-        String msg;
-        String status;
+    public Map carArchived(Long id) {
+        Map response = new HashMap();
+
         Optional<Car> car = carRepository.findById(id);
         if (!car.isPresent()) {
             throw new RuntimeException("Car with id " + car.get().getCarId() + " does not exist");
         } else {
+            String msg;
+
             String regNum = car.get().getRegistrationNumber().toUpperCase();
-            status = car.get().getCarStatus().toString().toUpperCase();
-            final String[] params = new String[]{regNum, status};
+            final String[] params = new String[]{regNum};
 
             if(car.get().getCarStatus().equals(CarStatus.AVAILABLE)){
                 car.get().setCarStatus(CarStatus.ARCHIVED);
                 msg = messageSource.getMessage("response.car.archived", params,null, Constants.DEFAULT_LOCAL);
+                response.put("message", msg);
             } else {
                 msg = messageSource.getMessage("response.car.notArchived", params,null, Constants.DEFAULT_LOCAL);
+                String status = car.get().getCarStatus().toString().toUpperCase();
+                response.put("message", msg);
+                response.put("status", status);
             }
         }
-        String[] response = new String[]{msg, status};
         return  response;
     }
 
