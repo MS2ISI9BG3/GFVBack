@@ -32,7 +32,6 @@ public class Car extends AbstractAuditingEntity {
 
     private int numberOfSeats;
 
-    @NotNull
     private int odometer;
 
     @NotNull

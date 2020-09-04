@@ -39,8 +39,7 @@ public class Booking extends AbstractAuditingEntity {
 
     private String description;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "userLogin", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 }

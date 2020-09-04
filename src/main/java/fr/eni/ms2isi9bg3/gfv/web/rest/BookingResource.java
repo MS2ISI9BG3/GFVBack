@@ -98,19 +98,23 @@ public class BookingResource {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/bookings/reserved", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/bookings/reserved/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Map bookingConfirmed (@RequestBody Booking booking) {
-        log.debug("REST request to validate booking");
-        String msg = bookingService.bookingConfirmed(booking);
+    public Map bookingConfirmed (@PathVariable Long bookingId) {
+        log.debug("REST request to validate Booking Id {}", bookingId);
+        Optional<Booking> bk = bookingRepository.findById(bookingId);
+        String msg = bookingService.bookingConfirmed(bk.get().getCar().getCarId());
+        mailService.sendBookingConfirmedEmail(bk.get().getUser());
         return Collections.singletonMap("message", msg);
     }
 
-    @PutMapping(value = "/bookings/refused", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/bookings/refused/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Map bookingRefused (@RequestBody Booking booking) {
-        log.debug("REST request to validate booking");
-        String msg = bookingService.bookingRefused(booking);
+    public Map bookingRefused (@PathVariable Long bookingId) {
+        log.debug("REST request to refuse Booking Id {}", bookingId);
+        Optional<Booking> bk = bookingRepository.findById(bookingId);
+        String msg = bookingService.bookingRefused(bk.get().getCar().getCarId());
+        mailService.sendBookingRefusedEmail(bk.get().getUser());
         return Collections.singletonMap("message", msg);
     }
 
@@ -124,25 +128,25 @@ public class BookingResource {
     @GetMapping("/bookings/{id}")
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Booking> getBooking(@PathVariable Long id) {
-        log.debug("REST request to get Booking : {}", id);
+        log.debug("REST request to get Booking Id {}", id);
         Optional<Booking> booking = bookingRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(booking);
     }
 
     /**
-     * {@code GET  /bookings/:login} : get all booking for "login".
+     * {@code GET  /bookings/:id} : get bookings for "user".
      *
-     * @param login the login of the bookings to retrieve.
+     * @param id the login of the bookings to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}
      * and with body the bookings, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/bookings/user/{login}")
+    @GetMapping("/bookings/user/{id}")
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
-    public ResponseEntity<List<Booking>> getBookingByLogin(@PathVariable String login) {
-        log.debug("REST request to get Booking : {}", login);
-        List<Booking> bookings = bookingRepository.findAllByUserLogin(login);
-        if(!bookings.stream().filter(u -> u.getUser().getLogin().equals(login)).findFirst().isPresent()) {
-            log.error("There is no booking for the user {}", login);
+    public ResponseEntity<List<Booking>> getBookingByLogin(@PathVariable Long id) {
+        log.debug("REST request to get Booking : {}", id);
+        List<Booking> bookings = bookingRepository.findAllByUserId(id);
+        if(!bookings.stream().anyMatch(u -> u.getUser().getId().equals(id))) {
+            log.error("There is no booking for the user ID {}", id);
             //throw new RuntimeException("There is no booking for the user");
         }
         return new ResponseEntity<>(bookings, HttpStatus.OK);

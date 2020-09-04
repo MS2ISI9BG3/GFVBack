@@ -48,7 +48,7 @@ public class BookingService {
         newBooking.setCar(booking.getCar());
         newBooking.setDescription(booking.getDescription());
 
-        Optional<User> bkUser = userRepository.findOneByLogin(booking.getUser().getLogin());
+        Optional<User> bkUser = userService.getCurrentUser();
         newBooking.setUser(bkUser.get());
 
         bookingRepository.save(newBooking);
@@ -75,7 +75,7 @@ public class BookingService {
         booking.setCar(booking.getCar());
         booking.setDescription(booking.getDescription());
 
-        Optional<User> bkUser = userRepository.findOneByLogin(booking.getUser().getLogin());
+        Optional<User> bkUser = userService.getCurrentUser();
         booking.setUser(bkUser.get());
 
         bookingRepository.save(booking);
@@ -90,9 +90,8 @@ public class BookingService {
         carService.updateCarStatus(carToBeBooked.get(), CarStatus.VALIDATION_PENDING);
     }
 
-    public String bookingConfirmed(Booking booking) {
-
-        Optional<Car> carToBeReserved = carRepository.findOneByCarId(booking.getCar().getCarId());
+    public String bookingConfirmed(Long id) {
+        Optional<Car> carToBeReserved = carRepository.findOneByCarId(id);
         if (!carToBeReserved.isPresent()) {
             throw new RuntimeException("Car with id " + carToBeReserved.get().getCarId() + " does not exist");
         }
@@ -104,9 +103,9 @@ public class BookingService {
         return msg;
     }
 
-    public String bookingRefused(Booking booking) {
+    public String bookingRefused(Long id) {
 
-        Optional<Car> carToBeReserved = carRepository.findOneByCarId(booking.getCar().getCarId());
+        Optional<Car> carToBeReserved = carRepository.findOneByCarId(id);
         if (!carToBeReserved.isPresent()) {
             throw new RuntimeException("Car with id " + carToBeReserved.get().getCarId() + " does not exist");
         }

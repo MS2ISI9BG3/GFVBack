@@ -5,7 +5,7 @@ server:
 logging:
   level:
     ROOT: INFO
-    io.github.jhipster: DEBUG
+    io.github.jhipster: INFO
     fr.eni.ms2isi9bg3.gfv: DEBUG
 
 spring:
@@ -17,8 +17,8 @@ spring:
       additional-exclude: static/**,
   datasource:
     url: jdbc:mysql://localhost:3306/gfv?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&createDatabaseIfNotExist=true
-    username: root
-    password: 1234
+    username:
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false

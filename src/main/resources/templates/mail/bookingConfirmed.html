@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+    <head>
+        <title th:text="#{booking.title}">BOOKING CONFIRMED</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <p th:text="#{email.activated.greeting(${user.firstName}, ${user.lastName})}">
+            Dear
+        </p>
+        <p th:text="#{booking.confirmed.text1}">
+            Your car booking has been confirmed.
+        </p>
+        <p>
+            <span th:text="#{email.activation.text2}">Regards, </span>
+            <br/>
+            <em th:text="#{email.signature}">GFV</em>
+        </p>
+    </body>
+</html>

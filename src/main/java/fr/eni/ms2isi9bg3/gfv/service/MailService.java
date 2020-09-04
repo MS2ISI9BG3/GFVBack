@@ -36,7 +36,7 @@ public class MailService {
 	private static final String BASE_URL = "baseUrl";
 
 	// TODO to be define in app properties
-	private static final String ADMIN_EMAIL = "donald.ndizeye@gmail.com";
+	private static final String ADMIN_EMAIL = "gfvadmin@yopmail.com";
 
 	private final JHipsterProperties jHipsterProperties;
 
@@ -123,5 +123,23 @@ public class MailService {
 	public void sendBookingNotification(Optional<User> user) {
 		log.debug("Sending booking notification email to the admin");
 		sendNotificationToAdmin(user.get(), "mail/bookingNotification", "email.booking.title");
+	}
+
+	@Async
+	public void sendBookingConfirmedEmail(User user) {
+		log.debug("Sending booking confirmed email to '{}'", user.getEmail());
+		sendEmailFromTemplate(user, "mail/bookingConfirmed", "booking.title");
+	}
+
+	@Async
+	public void sendBookingRefusedEmail(User user) {
+		log.debug("Sending booking refused email to '{}'", user.getEmail());
+		sendEmailFromTemplate(user, "mail/bookingRefused", "booking.title");
+	}
+
+	@Async
+	public void sendAccountActivatedEmail(User user) {
+		log.debug("Sending account activated email to '{}'", user.getEmail());
+		sendEmailFromTemplate(user, "mail/accountActivatedEmail", "email.activation.title");
 	}
 }
