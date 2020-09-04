@@ -5,8 +5,7 @@ public enum CarStatus {
     RESERVED("status.type.reserved"),
     UNDER_MAINTENANCE("status.type.underMaintenance"),
     ARCHIVED("status.type.archived"),
-    VALIDATION_PENDING(""),
-    REFUSED("");
+    VALIDATION_PENDING("status.type.pending");
 
     private String i18nKey;
 

@@ -1,5 +1,6 @@
 package fr.eni.ms2isi9bg3.gfv.service;
 
+import fr.eni.ms2isi9bg3.gfv.config.Constants;
 import fr.eni.ms2isi9bg3.gfv.domain.Car;
 import fr.eni.ms2isi9bg3.gfv.domain.CarBrand;
 import fr.eni.ms2isi9bg3.gfv.domain.CarModel;
@@ -8,6 +9,7 @@ import fr.eni.ms2isi9bg3.gfv.enums.CarStatus;
 import fr.eni.ms2isi9bg3.gfv.repository.CarRepository;
 import fr.eni.ms2isi9bg3.gfv.service.exception.RegistrationNumberAlreadyUsedException;
 import fr.eni.ms2isi9bg3.gfv.service.exception.VinAlreadyUsedException;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -17,9 +19,11 @@ import java.util.Optional;
 @Service
 public class CarService {
     private final CarRepository carRepository;
+    private final MessageSource messageSource;
 
-    public CarService(CarRepository carRepository) {
+    public CarService(CarRepository carRepository, MessageSource messageSource) {
         this.carRepository = carRepository;
+        this.messageSource = messageSource;
     }
 
     public Car saveCar(Car car) {
@@ -72,6 +76,28 @@ public class CarService {
     public void updateCarStatus(Car car, CarStatus status) {
         car.setCarStatus(status);
         carRepository.save(car);
+    }
+
+    public String[] carArchived(Long id) {
+        String msg;
+        String status;
+        Optional<Car> car = carRepository.findById(id);
+        if (!car.isPresent()) {
+            throw new RuntimeException("Car with id " + car.get().getCarId() + " does not exist");
+        } else {
+            String regNum = car.get().getRegistrationNumber().toUpperCase();
+            status = car.get().getCarStatus().toString().toUpperCase();
+            final String[] params = new String[]{regNum, status};
+
+            if(car.get().getCarStatus().equals(CarStatus.AVAILABLE)){
+                car.get().setCarStatus(CarStatus.ARCHIVED);
+                msg = messageSource.getMessage("response.car.archived", params,null, Constants.DEFAULT_LOCAL);
+            } else {
+                msg = messageSource.getMessage("response.car.notArchived", params,null, Constants.DEFAULT_LOCAL);
+            }
+        }
+        String[] response = new String[]{msg, status};
+        return  response;
     }
 
     private void setCarProperties(Car car, int power, int numberOfSeats, int odometer, Date insuranceValidityDate, Date serviceValidityDate, CarBrand carBrand, CarModel carModel, Site carSite) {

@@ -19,8 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -142,5 +141,18 @@ public class CarResource {
         log.debug("REST request to get Car : {}", id);
         Optional<Car> car = carRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(car);
+    }
+
+    @PutMapping("/cars/archive/{id}")
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public Map carArchived(@PathVariable Long id) {
+        log.debug("REST request to get Car : {}", id, " archived");
+        Map map = new HashMap();
+        String[] response = carService.carArchived(id);
+        for (String rsp: response) {
+            map.put("message", response[0]);
+            map.put("status", response[1]);
+        }
+        return map;
     }
 }

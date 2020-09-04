@@ -17,8 +17,8 @@ spring:
       additional-exclude: static/**,
   datasource:
     url: jdbc:mysql://localhost:3306/gfv?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&createDatabaseIfNotExist=true
-    username:
-    password:
+    username: root
+    password: 1234
     hikari:
       poolName: Hikari
       auto-commit: false

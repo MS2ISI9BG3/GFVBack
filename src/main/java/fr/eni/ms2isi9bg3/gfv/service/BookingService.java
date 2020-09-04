@@ -7,7 +7,6 @@ import fr.eni.ms2isi9bg3.gfv.domain.User;
 import fr.eni.ms2isi9bg3.gfv.enums.CarStatus;
 import fr.eni.ms2isi9bg3.gfv.repository.BookingRepository;
 import fr.eni.ms2isi9bg3.gfv.repository.CarRepository;
-import fr.eni.ms2isi9bg3.gfv.repository.UserRepository;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +18,14 @@ public class BookingService {
     private final CarRepository carRepository;
     private final CarService carService;
     private final MessageSource messageSource;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     public BookingService(BookingRepository bookingRepository, CarRepository carRepository,
-                          CarService carService, MessageSource messageSource, UserRepository userRepository,
-                          UserService userService) {
+                          CarService carService, MessageSource messageSource, UserService userService) {
         this.bookingRepository = bookingRepository;
         this.carRepository = carRepository;
         this.carService = carService;
         this.messageSource = messageSource;
-        this.userRepository = userRepository;
         this.userService = userService;
     }
 
