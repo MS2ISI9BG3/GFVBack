@@ -1,5 +1,6 @@
 package fr.eni.ms2isi9bg3.gfv.web.rest;
 
+import fr.eni.ms2isi9bg3.gfv.domain.Response;
 import io.github.jhipster.web.util.HeaderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -78,11 +79,14 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
     @GetMapping("/activate")
-    public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
-        if (!user.isPresent()) {
+    public Response activateAccount(@RequestParam(value = "key") String key) {
+        Optional<Response> userActivated = userService.activateRegistration(key);
+        if (!userActivated.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
+        Optional<User> user = userRepository.findOneByLogin(userActivated.get().getUserLogin());
+        mailService.sendAccountActivatedEmail(user.get());
+        return userActivated.get();
     }
 
     /**

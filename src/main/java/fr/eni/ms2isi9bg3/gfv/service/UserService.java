@@ -2,6 +2,7 @@ package fr.eni.ms2isi9bg3.gfv.service;
 
 import fr.eni.ms2isi9bg3.gfv.config.Constants;
 import fr.eni.ms2isi9bg3.gfv.domain.Authority;
+import fr.eni.ms2isi9bg3.gfv.domain.Response;
 import fr.eni.ms2isi9bg3.gfv.domain.User;
 import fr.eni.ms2isi9bg3.gfv.repository.AuthorityRepository;
 import fr.eni.ms2isi9bg3.gfv.repository.UserRepository;
@@ -51,7 +52,7 @@ public class UserService {
         this.cacheManager = cacheManager;
     }
 
-    public Optional<User> activateRegistration(String key) {
+    public Optional<Response> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
                 .map(user -> {
@@ -60,7 +61,7 @@ public class UserService {
                     user.setActivationKey(null);
                     this.clearUserCaches(user);
                     log.debug("Activated user: {}", user);
-                    return user;
+                    return new Response(user.getLogin());
                 });
     }
 
