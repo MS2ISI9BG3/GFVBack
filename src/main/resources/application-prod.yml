@@ -1,5 +1,5 @@
-server:
-  port: 10080
+#server:
+#  port: 10080
 
 logging:
   level:
@@ -24,7 +24,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: donald.ndizeye@gmail.com
-    password: nepedfhaccfcpxbv
+    password: lvkmninxfqixnult
     protocol: smtp
     properties:
       mail:

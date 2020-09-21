@@ -21,19 +21,25 @@ public class GfvApplication extends SpringBootServletInitializer {
 
 	//private static final Logger log = LoggerFactory.getLogger(GfvApplication.class);
 
-	private final Environment env;
+	//private final Environment env;
 
+	/*
 	public GfvApplication(Environment env) {
 		this.env = env;
-	}
+	}*/
 
 	public static void main(String[] args) {
+		SpringApplication.run(GfvApplication.class, args);
+
+		/*
 		SpringApplication app = new SpringApplication(GfvApplication.class);
 		DefaultProfileUtil.addDefaultProfile(app);
 		Environment env = app.run(args).getEnvironment();
 		logApplicationStartup(env);
+		*/
 	}
 
+	/*
 	private static void logApplicationStartup(Environment env) {
 		String protocol = "http";
 		if (env.getProperty("server.ssl.key-store") != null) {
@@ -64,6 +70,6 @@ public class GfvApplication extends SpringBootServletInitializer {
 						serverPort,
 						contextPath,
 						env.getActiveProfiles());
-	}
+	}*/
 
 }
