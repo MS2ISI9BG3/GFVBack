@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,7 +17,7 @@ import java.net.UnknownHostException;
 
 @SpringBootApplication
 @Slf4j
-public class GfvApplication {
+public class GfvApplication extends SpringBootServletInitializer {
 
 	//private static final Logger log = LoggerFactory.getLogger(GfvApplication.class);
 
