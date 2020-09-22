@@ -98,12 +98,15 @@ public class BookingResource {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/bookings/reserved/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/bookings/confirmed/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Map bookingConfirmed (@PathVariable Long bookingId) {
         log.debug("REST request to validate Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
-        String msg = bookingService.bookingConfirmed(bk.get().getCar().getCarId());
+        if (!bk.isPresent()) {
+            throw new RuntimeException("Booking with id " + bookingId + " does not exist");
+        }
+        String msg = bookingService.bookingConfirmed(bookingId);
         mailService.sendBookingConfirmedEmail(bk.get().getUser());
         return Collections.singletonMap("message", msg);
     }
@@ -113,8 +116,23 @@ public class BookingResource {
     public Map bookingRefused (@PathVariable Long bookingId) {
         log.debug("REST request to refuse Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
-        String msg = bookingService.bookingRefused(bk.get().getCar().getCarId());
+        if (!bk.isPresent()) {
+            throw new RuntimeException("Booking with id " + bookingId + " does not exist");
+        }
+        String msg = bookingService.bookingRefused(bookingId);
         mailService.sendBookingRefusedEmail(bk.get().getUser());
+        return Collections.singletonMap("message", msg);
+    }
+
+    @PutMapping(value = "/bookings/canceled/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public Map bookingCanceled (@PathVariable Long bookingId) {
+        log.debug("REST request to cancel Booking Id {}", bookingId);
+        Optional<Booking> bk = bookingRepository.findById(bookingId);
+        if (!bk.isPresent()) {
+            throw new RuntimeException("Booking with id " + bookingId + " does not exist");
+        }
+        String msg = bookingService.bookingCanceled(bookingId);
         return Collections.singletonMap("message", msg);
     }
 
@@ -143,7 +161,7 @@ public class BookingResource {
     @GetMapping("/bookings/user/{id}")
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<List<Booking>> getBookingByLogin(@PathVariable Long id) {
-        log.debug("REST request to get Booking : {}", id);
+        log.debug("REST request to get Booking for user id : {}", id);
         List<Booking> bookings = bookingRepository.findAllByUserId(id);
         if(!bookings.stream().anyMatch(u -> u.getUser().getId().equals(id))) {
             log.error("There is no booking for the user ID {}", id);

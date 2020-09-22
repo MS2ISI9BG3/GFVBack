@@ -1,5 +1,6 @@
 package fr.eni.ms2isi9bg3.gfv.domain;
 
+import fr.eni.ms2isi9bg3.gfv.enums.BookingStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,10 +18,10 @@ public class Booking extends AbstractAuditingEntity {
 
     @NotNull
     @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private Date departureDate;
 
     @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private Date arrivalDate;
 
     @NotNull
     @ManyToOne
@@ -42,4 +43,8 @@ public class Booking extends AbstractAuditingEntity {
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "bookingStatus")
+    private BookingStatus bookingStatus;
 }
