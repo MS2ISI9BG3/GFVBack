@@ -48,7 +48,7 @@ public class CarResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/cars")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Car> createCar(@Valid @RequestBody Car car) throws URISyntaxException {
         log.debug("REST request to save Car : {}", car);
         if (car.getCarId() != null) {
@@ -70,7 +70,7 @@ public class CarResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/cars")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Car> updateCar(@Valid @RequestBody Car car) throws URISyntaxException {
         log.debug("REST request to update Car : {}", car);
         if (car.getCarId() == null) {
@@ -88,7 +88,7 @@ public class CarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of cars in body.
      */
     @GetMapping("/cars")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<List<Car>> getAllCars(final Pageable pageable) {
         log.debug("REST request to get all Cars");
         List<Car> cars = carRepository.findAll();
@@ -101,6 +101,7 @@ public class CarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of available cars in body.
      */
     @GetMapping("/cars/available")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<Car> getAvailableCars() {
         log.debug("REST request to get all available Cars");
         return carRepository.findAvailableCars();
@@ -112,7 +113,7 @@ public class CarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of available cars in body.
      */
     @GetMapping("/cars/sites/{siteId}")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<Car> getCarsBySite(@PathVariable Long siteId) {
         log.debug("REST request to get all Cars by Site : {}", siteId);
         return carRepository.findCarsBySite(siteId);
@@ -124,6 +125,7 @@ public class CarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of available cars in body.
      */
     @GetMapping("/cars/available/sites/{siteId}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<Car> getAvailableCarsBySite(@PathVariable Long siteId) {
         log.debug("REST request to get all Cars by Site : {}", siteId);
         return carRepository.findAvailableCarsBySite(siteId);
@@ -136,7 +138,7 @@ public class CarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the car, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/cars/{id}")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Car> getCar(@PathVariable Long id) {
         log.debug("REST request to get Car : {}", id);
         Optional<Car> car = carRepository.findById(id);
@@ -144,7 +146,7 @@ public class CarResource {
     }
 
     @PutMapping("/cars/archive/{id}")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Map carArchived(@PathVariable Long id) {
         log.debug("REST request to get Car ID : {} archived", id);
         Map response = carService.carArchived(id);

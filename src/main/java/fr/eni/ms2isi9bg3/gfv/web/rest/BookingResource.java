@@ -52,7 +52,7 @@ public class BookingResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/bookings")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Booking> createBooking(@Valid @RequestBody Booking booking) throws URISyntaxException {
         log.debug("REST request to save Booking : {}", booking);
         if (booking.getBookingId() != null) {
@@ -74,7 +74,7 @@ public class BookingResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/bookings")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Booking> updateBooking(@Valid @RequestBody Booking booking) throws URISyntaxException {
         log.debug("REST request to Update Booking : {}", booking);
         if (booking.getBookingId() == null) {
@@ -91,7 +91,7 @@ public class BookingResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of bookings in body.
      */
     @GetMapping("/bookings")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<Booking>> getAllBookings(final Pageable pageable) {
         log.debug("REST request to get all Bookings");
         List<Booking> bookings = bookingRepository.findAll();
@@ -99,7 +99,7 @@ public class BookingResource {
     }
 
     @PutMapping(value = "/bookings/confirmed/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Map bookingConfirmed (@PathVariable Long bookingId) {
         log.debug("REST request to validate Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
@@ -112,7 +112,7 @@ public class BookingResource {
     }
 
     @PutMapping(value = "/bookings/refused/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Map bookingRefused (@PathVariable Long bookingId) {
         log.debug("REST request to refuse Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
@@ -125,7 +125,7 @@ public class BookingResource {
     }
 
     @PutMapping(value = "/bookings/returned/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Map bookingReturned (@PathVariable Long bookingId) throws Exception {
         log.debug("REST request to validate Booking Id {} return", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
@@ -137,7 +137,7 @@ public class BookingResource {
     }
 
     @PutMapping(value = "/bookings/canceled/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public Map bookingCanceled (@PathVariable Long bookingId) {
         log.debug("REST request to cancel Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
@@ -156,7 +156,7 @@ public class BookingResource {
      * or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/bookings/{id}")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Booking> getBooking(@PathVariable Long id) {
         log.debug("REST request to get Booking Id {}", id);
         Optional<Booking> booking = bookingRepository.findById(id);
@@ -171,7 +171,7 @@ public class BookingResource {
      * and with body the bookings, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/bookings/user/{id}")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<List<Booking>> getBookingByLogin(@PathVariable Long id) {
         log.debug("REST request to get Booking for user id : {}", id);
         List<Booking> bookings = bookingRepository.findAllByUserId(id);

@@ -1,6 +1,7 @@
 package fr.eni.ms2isi9bg3.gfv.web.rest;
 
 import fr.eni.ms2isi9bg3.gfv.domain.Response;
+import fr.eni.ms2isi9bg3.gfv.security.AuthoritiesConstants;
 import io.github.jhipster.web.util.HeaderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ import fr.eni.ms2isi9bg3.gfv.web.rest.vm.KeyAndPasswordVM;
 import fr.eni.ms2isi9bg3.gfv.web.rest.vm.ManagedUserVM;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -122,6 +124,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PutMapping("/account")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
@@ -143,6 +146,7 @@ public class AccountResource {
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
         if (!checkPasswordLength(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();

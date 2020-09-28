@@ -48,7 +48,7 @@ public class CarModelResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/models")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CarModel> createModel(@Valid @RequestBody CarModel model) throws URISyntaxException {
         log.debug("REST request to save Model : {}", model);
         if (model.getModelId() != null) {
@@ -71,7 +71,7 @@ public class CarModelResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/models")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CarModel> updateModel(@Valid @RequestBody CarModel model) throws URISyntaxException {
         log.debug("REST request to update model : {}", model);
         if (model.getModelId() == null) {
@@ -89,6 +89,7 @@ public class CarModelResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of models in body.
      */
     @GetMapping("/models")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<CarModel> getAllModels() {
         log.debug("REST request to get all models");
         return carModelRepository.findAll();
@@ -100,6 +101,7 @@ public class CarModelResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the given model in body.
      */
     @GetMapping("/models/{id}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<CarModel> getModel(@PathVariable Long id) {
         log.debug("REST request to get a given model by ID : {}", id);
         Optional<CarModel> carModel = carModelRepository.findById(id);
@@ -112,6 +114,7 @@ public class CarModelResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of models in body.
      */
     @GetMapping("/models/available")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<CarModel> getAvailableModels() {
         log.debug("REST request to get available models");
         return carModelRepository.findAllByArchivedIsFalse();
@@ -123,6 +126,7 @@ public class CarModelResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of models in body.
      */
     @GetMapping("/models/available/{id}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<CarModel> getAvailableModelsByBrand(@PathVariable Long id) {
         log.debug("REST request to get available models for a given Brand");
         return carModelService.findAvailableModelByBrand(id);

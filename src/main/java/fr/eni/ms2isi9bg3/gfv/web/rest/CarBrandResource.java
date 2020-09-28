@@ -45,7 +45,7 @@ public class CarBrandResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/brands")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CarBrand> createBrand(@Valid @RequestBody CarBrand brand) throws URISyntaxException {
         log.debug("REST request to save Brand : {}", brand);
         if (brand.getBrandId() != null) {
@@ -68,7 +68,7 @@ public class CarBrandResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/brands")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CarBrand> updateBrand(@Valid @RequestBody CarBrand brand) throws URISyntaxException {
         log.debug("REST request to update brand : {}", brand);
         if (brand.getBrandId() == null) {
@@ -86,6 +86,7 @@ public class CarBrandResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of brands in body.
      */
     @GetMapping("/brands")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<CarBrand> getAllBrands() {
         log.debug("REST request to get all brands");
         return carBrandRepository.findAllByOrderByBrandNameAsc();
@@ -97,6 +98,7 @@ public class CarBrandResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the given brand in body.
      */
     @GetMapping("/brands/{id}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<CarBrand> getBrand(@PathVariable Long id) {
         log.debug("REST request to get a given brand by ID : {}", id);
         Optional<CarBrand> carBrand = carBrandRepository.findById(id);
@@ -109,6 +111,7 @@ public class CarBrandResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of brands in body.
      */
     @GetMapping("/brands/available")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<CarBrand> getAvailableBrands() {
         log.debug("REST request to get all brands");
         return carBrandRepository.findAllByArchivedIsFalse();

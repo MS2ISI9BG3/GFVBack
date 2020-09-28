@@ -38,7 +38,7 @@ public class SiteResource {
     }
 
     @PostMapping("/sites")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Site> createSite(@Valid @RequestBody Site site) throws URISyntaxException {
         log.debug("REST request to save Site : {}", site);
         if (site.getSiteId() != null) {
@@ -51,7 +51,7 @@ public class SiteResource {
     }
 
     @PutMapping("/sites")
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Site> updateSite(@Valid @RequestBody Site site) throws URISyntaxException {
         log.debug("REST request to update Site : {}", site);
         if (site.getSiteId() == null) {
@@ -64,6 +64,7 @@ public class SiteResource {
     }
 
     @GetMapping("/sites")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<List<Site>> getAllSites() {
         log.debug("REST request to get All Sites");
         List<Site> site = siteRepository.findAll();
@@ -71,6 +72,7 @@ public class SiteResource {
     }
 
     @GetMapping("/sites/available")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<List<Site>> getAvailableSites() {
         log.debug("REST request to get Available Sites");
         List<Site> site = siteRepository.findAllByArchivedIsFalse();
@@ -78,6 +80,7 @@ public class SiteResource {
     }
 
     @GetMapping("/sites/{id}")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Site> getSite(@PathVariable Long id) {
         log.debug("REST request to get Site : {}", id);
         Optional<Site> site = siteRepository.findById(id);
