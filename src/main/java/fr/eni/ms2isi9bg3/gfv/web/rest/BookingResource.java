@@ -124,6 +124,18 @@ public class BookingResource {
         return Collections.singletonMap("message", msg);
     }
 
+    @PutMapping(value = "/bookings/returned/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public Map bookingReturned (@PathVariable Long bookingId) throws Exception {
+        log.debug("REST request to validate Booking Id {} return", bookingId);
+        Optional<Booking> bk = bookingRepository.findById(bookingId);
+        if (!bk.isPresent()) {
+            throw new RuntimeException("Booking with id " + bookingId + " does not exist");
+        }
+        String msg = bookingService.bookingReturned(bookingId);
+        return Collections.singletonMap("message", msg);
+    }
+
     @PutMapping(value = "/bookings/canceled/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Map bookingCanceled (@PathVariable Long bookingId) {

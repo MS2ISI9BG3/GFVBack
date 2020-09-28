@@ -2,12 +2,14 @@ package fr.eni.ms2isi9bg3.gfv.web.rest.vm;
 
 import fr.eni.ms2isi9bg3.gfv.service.dto.UserDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Size;
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ManagedUserVM extends UserDTO {
 

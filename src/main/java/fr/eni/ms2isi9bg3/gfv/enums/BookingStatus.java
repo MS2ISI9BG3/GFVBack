@@ -4,6 +4,7 @@ public enum BookingStatus {
     CONFIRMED("status.type.confirmed"),
     REJECTED("status.type.rejected"),
     CANCELED("status.type.canceled"),
+    COMPLETED("status.type.completed"),
     VALIDATION_PENDING("status.type.pending");
 
     private String i18nKey;

@@ -11,7 +11,6 @@ import fr.eni.ms2isi9bg3.gfv.service.exception.RegistrationNumberAlreadyUsedExce
 import fr.eni.ms2isi9bg3.gfv.service.exception.VinAlreadyUsedException;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Date;
 import java.util.HashMap;

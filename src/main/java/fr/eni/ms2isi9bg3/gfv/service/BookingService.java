@@ -122,6 +122,27 @@ public class BookingService {
         return messageSource.getMessage("booking.notification.refused", params,null, Constants.DEFAULT_LOCAL);
     }
 
+    public String bookingReturned(Long id) throws Exception {
+        //Optional<Booking> bkg = bookingRepository.findById(id);
+
+        Optional<Car> carToBeReserved = carRepository.findOneByCarId(bookingRepository.findById(id).get().getCar().getCarId());
+        if (!carToBeReserved.isPresent()) {
+            throw new RuntimeException("Car with id " + carToBeReserved.get().getCarId() + " does not exist");
+        }
+
+        if(carToBeReserved.get().getCarStatus().equals(CarStatus.RESERVED)) {
+            carService.updateCarStatus(carToBeReserved.get(), CarStatus.AVAILABLE);
+        } else {
+            throw new Exception("The car must have a RESERVED status");
+        }
+
+        bookingRepository.findById(id).get().setBookingStatus(BookingStatus.COMPLETED);
+
+        String regNum = carToBeReserved.get().getRegistrationNumber().toUpperCase();
+        final String[] params = new String[]{regNum};
+        return messageSource.getMessage("booking.notification.completed", params,null, Constants.DEFAULT_LOCAL);
+    }
+
     public String bookingCanceled(Long id) {
 
         Optional<Booking> bkg = bookingRepository.findById(id);

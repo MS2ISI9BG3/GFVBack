@@ -2,11 +2,13 @@ package fr.eni.ms2isi9bg3.gfv.domain;
 
 import fr.eni.ms2isi9bg3.gfv.config.Constants;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "gfv_site")
 @Data
