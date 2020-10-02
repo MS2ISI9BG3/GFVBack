@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.*;
 
 @RestController
@@ -112,23 +113,26 @@ public class CarResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of available cars in body.
      */
-    @GetMapping("/cars/sites/{siteId}")
+    /*@GetMapping("/cars/sites/{siteId}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     public List<Car> getCarsBySite(@PathVariable Long siteId) {
         log.debug("REST request to get all Cars by Site : {}", siteId);
         return carRepository.findCarsBySite(siteId);
-    }
+    }*/
 
     /**
      * {@code GET  /cars/available/sites/:siteId} : get all available cars by site.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of available cars in body.
      */
-    @GetMapping("/cars/available/sites/{siteId}")
+    @GetMapping("/cars/available/sites")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
-    public List<Car> getAvailableCarsBySite(@PathVariable Long siteId) {
-        log.debug("REST request to get all Cars by Site : {}", siteId);
-        return carRepository.findAvailableCarsBySite(siteId);
+    public List<Car> getAvailableCarsBySite(@RequestParam("departureSiteId") Long dsId,
+                                            @RequestParam("arrivalSiteId") Long asId,
+                                            @RequestParam("departureDate") String dDate,
+                                            @RequestParam("arrivalDate") String aDate) throws ParseException {
+        log.debug("REST request to get all Cars available for booking");
+        return carService.getCarsToBeReservedBySite(dsId, asId, dDate, aDate);
     }
 
     /**
@@ -145,11 +149,14 @@ public class CarResource {
         return ResponseUtil.wrapOrNotFound(car);
     }
 
-    @PutMapping("/cars/archive/{id}")
+    @PutMapping("/cars/archive")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Map carArchived(@PathVariable Long id) {
-        log.debug("REST request to get Car ID : {} archived", id);
-        Map response = carService.carArchived(id);
-        return response;
+    public ResponseEntity<Car> carArchived(@Valid @RequestBody Car car) throws Exception {
+        log.debug("REST request to archive Car : {}", car);
+        if (car.getCarId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idNull");
+        }
+        Car result = carService.archiveCar(car);
+        return ResponseEntity.ok().body(result);
     }
 }

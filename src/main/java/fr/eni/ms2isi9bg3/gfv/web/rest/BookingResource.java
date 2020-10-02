@@ -75,7 +75,7 @@ public class BookingResource {
      */
     @PutMapping("/bookings")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
-    public ResponseEntity<Booking> updateBooking(@Valid @RequestBody Booking booking) throws URISyntaxException {
+    public ResponseEntity<Booking> updateBooking(@Valid @RequestBody Booking booking) throws Exception {
         log.debug("REST request to Update Booking : {}", booking);
         if (booking.getBookingId() == null) {
             throw new BadRequestAlertException("Invalid id", "booking","doesn't exists");
@@ -100,52 +100,52 @@ public class BookingResource {
 
     @PutMapping(value = "/bookings/confirmed/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Map bookingConfirmed (@PathVariable Long bookingId) {
+    public ResponseEntity<Booking> bookingConfirmed (@PathVariable Long bookingId) {
         log.debug("REST request to validate Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
         if (!bk.isPresent()) {
             throw new RuntimeException("Booking with id " + bookingId + " does not exist");
         }
-        String msg = bookingService.bookingConfirmed(bookingId);
+        Optional<Booking> bkg = bookingService.bookingConfirmed(bookingId);
         mailService.sendBookingConfirmedEmail(bk.get().getUser());
-        return Collections.singletonMap("message", msg);
+        return ResponseUtil.wrapOrNotFound(bkg);
     }
 
     @PutMapping(value = "/bookings/refused/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Map bookingRefused (@PathVariable Long bookingId) {
+    public ResponseEntity<Booking> bookingRefused (@PathVariable Long bookingId) {
         log.debug("REST request to refuse Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
         if (!bk.isPresent()) {
             throw new RuntimeException("Booking with id " + bookingId + " does not exist");
         }
-        String msg = bookingService.bookingRefused(bookingId);
+        Optional<Booking> bkg = bookingService.bookingRefused(bookingId);
         mailService.sendBookingRefusedEmail(bk.get().getUser());
-        return Collections.singletonMap("message", msg);
+        return ResponseUtil.wrapOrNotFound(bkg);
     }
 
     @PutMapping(value = "/bookings/returned/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Map bookingReturned (@PathVariable Long bookingId) throws Exception {
+    public ResponseEntity<Booking> bookingReturned (@PathVariable Long bookingId) throws Exception {
         log.debug("REST request to validate Booking Id {} return", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
         if (!bk.isPresent()) {
             throw new RuntimeException("Booking with id " + bookingId + " does not exist");
         }
-        String msg = bookingService.bookingReturned(bookingId);
-        return Collections.singletonMap("message", msg);
+        Optional<Booking> bkg = bookingService.bookingReturned(bookingId);
+        return ResponseUtil.wrapOrNotFound(bkg);
     }
 
     @PutMapping(value = "/bookings/canceled/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
-    public Map bookingCanceled (@PathVariable Long bookingId) {
+    public ResponseEntity<Booking> bookingCanceled (@PathVariable Long bookingId) {
         log.debug("REST request to cancel Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
         if (!bk.isPresent()) {
             throw new RuntimeException("Booking with id " + bookingId + " does not exist");
         }
-        String msg = bookingService.bookingCanceled(bookingId);
-        return Collections.singletonMap("message", msg);
+        Optional<Booking> bkg = bookingService.bookingCanceled(bookingId);
+        return ResponseUtil.wrapOrNotFound(bkg);
     }
 
     /**

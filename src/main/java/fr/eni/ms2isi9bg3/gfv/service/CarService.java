@@ -1,30 +1,31 @@
 package fr.eni.ms2isi9bg3.gfv.service;
 
-import fr.eni.ms2isi9bg3.gfv.config.Constants;
-import fr.eni.ms2isi9bg3.gfv.domain.Car;
-import fr.eni.ms2isi9bg3.gfv.domain.CarBrand;
-import fr.eni.ms2isi9bg3.gfv.domain.CarModel;
-import fr.eni.ms2isi9bg3.gfv.domain.Site;
-import fr.eni.ms2isi9bg3.gfv.enums.CarStatus;
+import fr.eni.ms2isi9bg3.gfv.domain.*;
+import fr.eni.ms2isi9bg3.gfv.enums.BookingStatus;
+import fr.eni.ms2isi9bg3.gfv.repository.BookingRepository;
 import fr.eni.ms2isi9bg3.gfv.repository.CarRepository;
+import fr.eni.ms2isi9bg3.gfv.service.dto.CarFromBookingList;
 import fr.eni.ms2isi9bg3.gfv.service.exception.RegistrationNumberAlreadyUsedException;
 import fr.eni.ms2isi9bg3.gfv.service.exception.VinAlreadyUsedException;
-import org.springframework.context.MessageSource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
+@Slf4j
 public class CarService {
     private final CarRepository carRepository;
-    private final MessageSource messageSource;
+    private final BookingRepository bookingRepository;
 
-    public CarService(CarRepository carRepository, MessageSource messageSource) {
+    public CarService(CarRepository carRepository,
+                      BookingRepository bookingRepository) {
         this.carRepository = carRepository;
-        this.messageSource = messageSource;
+        this.bookingRepository = bookingRepository;
     }
 
     public Car saveCar(Car car) {
@@ -43,8 +44,10 @@ public class CarService {
         if (car.getRegistrationNumber() != null) {
             newCar.setRegistrationNumber(car.getRegistrationNumber().toLowerCase());
         }
-        setCarProperties(newCar, car.getPower(), car.getNumberOfSeats(), car.getOdometer(), car.getInsuranceValidityDate(), car.getServiceValidityDate(), car.getCarBrand(), car.getCarModel(), car.getCarSite());
-        newCar.setCarStatus(CarStatus.AVAILABLE);
+        setCarProperties(newCar, car.getPower(), car.getNumberOfSeats(), car.getOdometer(),
+                car.getInsuranceValidityDate(), car.getServiceValidityDate(), car.getCarBrand(), car.getCarModel(),
+                car.getCarSite());
+        newCar.setArchived(false);
         carRepository.save(newCar);
         return newCar;
     }
@@ -52,7 +55,7 @@ public class CarService {
     public Car updateCar(Car car) {
         Optional<Car> carByVin = carRepository.findOneByVin(car.getVin());
         if (carByVin.isPresent()) {
-            if (carByVin.get().getCarId() != car.getCarId()
+            if (!carByVin.get().getCarId().equals(car.getCarId())
                     && carByVin.get().getVin().equals(car.getVin().toLowerCase())) {
                 throw new VinAlreadyUsedException();
             }
@@ -61,51 +64,144 @@ public class CarService {
 
         Optional<Car> carByRegNb = carRepository.findOneByRegistrationNumber(car.getRegistrationNumber());
         if (carByRegNb.isPresent()) {
-            if (carByRegNb.get().getCarId() != car.getCarId()
+            if (!carByRegNb.get().getCarId().equals(car.getCarId())
                     && carByRegNb.get().getRegistrationNumber().equals(car.getRegistrationNumber().toLowerCase())) {
                 throw new RegistrationNumberAlreadyUsedException();
             }
         }
         car.setRegistrationNumber(car.getRegistrationNumber().toLowerCase());
 
-        setCarProperties(car, car.getPower(), car.getNumberOfSeats(), car.getOdometer(), car.getInsuranceValidityDate(), car.getServiceValidityDate(), car.getCarBrand(), car.getCarModel(), car.getCarSite());
-        car.setCarStatus(car.getCarStatus());
+        setCarProperties(car, car.getPower(), car.getNumberOfSeats(), car.getOdometer(), car.getInsuranceValidityDate(),
+                car.getServiceValidityDate(), car.getCarBrand(), car.getCarModel(), car.getCarSite());
+        car.setArchived(car.isArchived());
         carRepository.save(car);
         return car;
     }
 
-    public void updateCarStatus(Car car, CarStatus status) {
-        car.setCarStatus(status);
+    public Car archiveCar(Car car) throws Exception {
+        CarFromBookingList cfB = bookingRepository.findCarLastBooking(car.getCarId());
+        if(cfB.getStatus().equals(BookingStatus.COMPLETED)) {
+            car.setArchived(true);
+        } else {
+            throw new Exception("Car Booking is on going therefore the car cannot be deleted");
+        }
         carRepository.save(car);
+        return  car;
     }
 
-    public Map carArchived(Long id) {
-        Map response = new HashMap();
+    public List<Car> getCarsToBeReservedBySite(Long dsId, Long asId, String dDate, String aDate) throws ParseException {
+        List<Car> carToBeReserved;
 
-        Optional<Car> car = carRepository.findById(id);
-        if (!car.isPresent()) {
-            throw new RuntimeException("Car with id " + car.get().getCarId() + " does not exist");
-        } else {
-            String msg;
+        List<Car> cFNsb = getCarsFromNextSiteInBooking(asId, aDate);
+        List<Car> cFLsb = getCarsFromLastSiteInBooking(dsId, dDate);
 
-            String regNum = car.get().getRegistrationNumber().toUpperCase();
-            final String[] params = new String[]{regNum};
+        List<Car> cInB = Stream.concat(cFNsb.stream(), cFLsb.stream())
+                .distinct()
+                .collect(Collectors.toList());
+        List<Car> cNInb = getCarsNotInListFromBooking(dsId);
 
-            if(car.get().getCarStatus().equals(CarStatus.AVAILABLE)){
-                car.get().setCarStatus(CarStatus.ARCHIVED);
-                msg = messageSource.getMessage("response.car.archived", params,null, Constants.DEFAULT_LOCAL);
-                response.put("message", msg);
+        carToBeReserved = Stream.concat(cInB.stream(), cNInb.stream())
+                .distinct()
+                .collect(Collectors.toList());
+        return carToBeReserved;
+    }
+
+    private List<Car> getCarsFromNextSiteInBooking(Long asId, String aDate) throws ParseException {
+        List<Car> carsList = new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = formatter.parse(aDate);
+
+        List<CarFromBookingList> cFNsb = bookingRepository.findCarsFromNextSiteInBooking(asId);
+        List<Car> archivedCars = carRepository.findAllByArchivedIsTrue();
+        if(cFNsb.size() > 0) {
+            if(archivedCars.size() > 0) {
+                List<CarFromBookingList> cFblNotArchived = cFNsb.stream()
+                        .filter(cFbl -> archivedCars.stream()
+                                .anyMatch(ac -> !ac.getCarId().equals(cFbl.getCarId())))
+                        .collect(Collectors.toList());
+
+                for (CarFromBookingList bkg : cFblNotArchived) {
+                    if(date.before(bkg.getBDate())) {
+                        Car car= carRepository.findByCarId(bkg.getCarId());
+                        carsList.add(car);
+                    }
+                }
             } else {
-                msg = messageSource.getMessage("response.car.notArchived", params,null, Constants.DEFAULT_LOCAL);
-                String status = car.get().getCarStatus().toString().toUpperCase();
-                response.put("message", msg);
-                response.put("status", status);
+                for (CarFromBookingList bkg : cFNsb) {
+                    if(date.before(bkg.getBDate())) {
+                        Car car= carRepository.findByCarId(bkg.getCarId());
+                        carsList.add(car);
+                    }
+                }
             }
         }
-        return  response;
+        return carsList;
     }
 
-    private void setCarProperties(Car car, int power, int numberOfSeats, int odometer, Date insuranceValidityDate, Date serviceValidityDate, CarBrand carBrand, CarModel carModel, Site carSite) {
+    private List<Car> getCarsFromLastSiteInBooking(Long dsId, String dDate) throws ParseException {
+        List<Car> carsList = new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = formatter.parse(dDate);
+
+        List<CarFromBookingList> cFLsb = bookingRepository.findCarsFromLastSiteInBooking(dsId);
+        List<Car> archivedCars = carRepository.findAllByArchivedIsTrue();
+        if(cFLsb.size() > 0) {
+            if(archivedCars.size() > 0) {
+                List<CarFromBookingList> cFblNotArchived = cFLsb.stream()
+                        .filter(cFbl -> archivedCars.stream()
+                                .anyMatch(ac -> !ac.getCarId().equals(cFbl.getCarId())))
+                        .collect(Collectors.toList());
+
+                for (CarFromBookingList bkg : cFblNotArchived) {
+                    if(date.after(bkg.getBDate())) {
+                        Car car= carRepository.findByCarId(bkg.getCarId());
+                        carsList.add(car);
+                    }
+                }
+            } else {
+                for (CarFromBookingList bkg : cFLsb) {
+                    if(date.after(bkg.getBDate())) {
+                        Car car= carRepository.findByCarId(bkg.getCarId());
+                        carsList.add(car);
+                    }
+                }
+            }
+        }
+        return carsList;
+    }
+
+    private List<Car> getCarsNotInListFromBooking(Long dsId) {
+        List<Car> avCars = carRepository.findAvailableCarsBySite(dsId);
+
+        List<Car> carsList = new ArrayList<>();
+        List<CarFromBookingList> cFLsb = bookingRepository.findCarsFromLastSiteInBooking(dsId);
+        if(cFLsb.size() > 0 || avCars.size() > 0) {
+            List<Car> archivedCars = carRepository.findAllByArchivedIsTrue();
+            if(archivedCars.size() > 0) {
+                List<CarFromBookingList> cFbNotArchived = cFLsb.stream()
+                        .filter(cFbl -> archivedCars.stream()
+                                .anyMatch(ac -> !ac.getCarId().equals(cFbl.getCarId())))
+                        .collect(Collectors.toList());
+
+                carsList = avCars.stream()
+                        .filter(avc -> !cFbNotArchived.contains(avc))
+                        .collect(Collectors.toList());
+            } else {
+                carsList = avCars.stream()
+                        .filter(avc -> !cFLsb.contains(avc))
+                        .collect(Collectors.toList());
+            }
+        }
+        return carsList;
+    }
+
+    /*private static <T> Predicate<Car> distinctByKey(Function<? super Car, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }*/
+
+    private void setCarProperties(Car car, int power, int numberOfSeats, int odometer, Date insuranceValidityDate,
+                                  Date serviceValidityDate, CarBrand carBrand, CarModel carModel, Site carSite) {
         car.setPower(power);
         car.setNumberOfSeats(numberOfSeats);
         car.setOdometer(odometer);

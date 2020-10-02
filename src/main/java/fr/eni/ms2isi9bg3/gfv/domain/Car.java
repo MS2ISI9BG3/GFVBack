@@ -59,7 +59,7 @@ public class Car extends AbstractAuditingEntity {
     @JoinColumn(name = "carSiteId", nullable = false)
     private Site carSite;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "carStatus")
-    private CarStatus carStatus;
+    @NotNull
+    @Column(name = "isArchived", nullable = false)
+    private boolean archived = false;
 }
