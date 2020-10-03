@@ -80,11 +80,16 @@ public class CarService {
 
     public Car archiveCar(Car car) throws Exception {
         CarFromBookingList cfB = bookingRepository.findCarLastBooking(car.getCarId());
-        if(cfB.getStatus().equals(BookingStatus.COMPLETED)) {
-            car.setArchived(true);
+        if (cfB.getCarId() != null) {
+            if(cfB.getStatus().equals(BookingStatus.COMPLETED)) {
+                car.setArchived(true);
+            } else {
+                log.warn("Car Booking is on going. Booking status is {}", cfB.getStatus());
+            }
         } else {
-            throw new Exception("Car Booking is on going therefore the car cannot be deleted");
+            car.setArchived(true);
         }
+
         carRepository.save(car);
         return  car;
     }
