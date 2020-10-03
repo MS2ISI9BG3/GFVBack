@@ -25,8 +25,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "and nb.departureSite.siteId = :id group by nb.car.carId")
     List<CarFromBookingList> findCarsFromNextSiteInBooking(Long id);
 
-    @Query("SELECT NEW fr.eni.ms2isi9bg3.gfv.service.dto.CarFromBookingList(lb.car.carId, lb.bookingStatus, max(lb.arrivalDate))" +
-            "FROM Booking lb WHERE lb.bookingStatus not in" +
+    @Query("SELECT NEW fr.eni.ms2isi9bg3.gfv.service.dto.CarFromBookingList(lb.car.carId, max(lb.bookingStatus)," +
+            "max(lb.arrivalDate)) FROM Booking lb WHERE lb.bookingStatus not in" +
             "(fr.eni.ms2isi9bg3.gfv.enums.BookingStatus.REJECTED, fr.eni.ms2isi9bg3.gfv.enums.BookingStatus.CANCELED)" +
             "and lb.car.carId = :id")
     CarFromBookingList findCarLastBooking(Long id);

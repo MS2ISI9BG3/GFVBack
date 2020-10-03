@@ -4,24 +4,22 @@ import fr.eni.ms2isi9bg3.gfv.domain.Booking;
 import fr.eni.ms2isi9bg3.gfv.domain.User;
 import fr.eni.ms2isi9bg3.gfv.enums.BookingStatus;
 import fr.eni.ms2isi9bg3.gfv.repository.BookingRepository;
-import fr.eni.ms2isi9bg3.gfv.repository.CarRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class BookingService {
     private final BookingRepository bookingRepository;
     private final UserService userService;
     private final MailService mailService;
 
-    public BookingService(BookingRepository bookingRepository, CarRepository carRepository,
-                          CarService carService, UserService userService,
-                          MailService mailService) {
+    public BookingService(BookingRepository bookingRepository, UserService userService, MailService mailService) {
         this.bookingRepository = bookingRepository;
         this.userService = userService;
         this.mailService = mailService;
@@ -91,18 +89,24 @@ public class BookingService {
         return bkg;
     }
 
-    public Optional<Booking> bookingReturned(Long id) throws Exception {
+    public Optional<Booking> bookingReturned(Long id) {
         Optional<Booking> bkg = bookingRepository.findById(id);
-        Date aDate = bkg.get().getArrivalDate();
-        LocalDate abDate = aDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        if(LocalDate.now().isAfter(abDate) || LocalDate.now().equals(abDate)) {
+        LocalDateTime abDate = convertToLocalDateTime(bkg.get().getArrivalDate());
+        if(LocalDateTime.now().isAfter(abDate) || LocalDateTime.now().equals(abDate)) {
             if(bkg.get().getBookingStatus().equals(BookingStatus.CONFIRMED)) {
                 bkg.get().setBookingStatus(BookingStatus.COMPLETED);
+            } else {
+                log.warn("Booking status is {}", bkg.get().getBookingStatus());
             }
         } else {
-            throw new Exception("Booking is on going and cannot be completed");
+            log.warn("Booking is on going and cannot be completed");
         }
         return bkg;
+    }
+
+    private LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return new java.sql.Timestamp(
+                dateToConvert.getTime()).toLocalDateTime();
     }
 
     public Optional<Booking> bookingCanceled(Long id) {

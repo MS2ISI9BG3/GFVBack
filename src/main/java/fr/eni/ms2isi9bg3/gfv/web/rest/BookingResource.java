@@ -126,8 +126,8 @@ public class BookingResource {
 
     @PutMapping(value = "/bookings/returned/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Booking> bookingReturned (@PathVariable Long bookingId) throws Exception {
-        log.debug("REST request to validate Booking Id {} return", bookingId);
+    public ResponseEntity<Booking> bookingReturned (@PathVariable Long bookingId) {
+        log.debug("REST request to return Booking Id {}", bookingId);
         Optional<Booking> bk = bookingRepository.findById(bookingId);
         if (!bk.isPresent()) {
             throw new RuntimeException("Booking with id " + bookingId + " does not exist");
