@@ -151,7 +151,7 @@ public class CarResource {
 
     @PutMapping("/cars/archive")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Car> carArchived(@Valid @RequestBody Car car) throws Exception {
+    public ResponseEntity<Car> carArchived(@Valid @RequestBody Car car) {
         log.debug("REST request to archive Car : {}", car);
         if (car.getCarId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idNull");

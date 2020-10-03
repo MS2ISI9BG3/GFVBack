@@ -1,14 +1,15 @@
 package fr.eni.ms2isi9bg3.gfv.service;
 
 import fr.eni.ms2isi9bg3.gfv.domain.Booking;
+import fr.eni.ms2isi9bg3.gfv.domain.Car;
 import fr.eni.ms2isi9bg3.gfv.domain.User;
 import fr.eni.ms2isi9bg3.gfv.enums.BookingStatus;
 import fr.eni.ms2isi9bg3.gfv.repository.BookingRepository;
+import fr.eni.ms2isi9bg3.gfv.repository.CarRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
@@ -18,11 +19,14 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final UserService userService;
     private final MailService mailService;
+    private final CarRepository carRepository;
 
-    public BookingService(BookingRepository bookingRepository, UserService userService, MailService mailService) {
+    public BookingService(BookingRepository bookingRepository, UserService userService, MailService mailService,
+                          CarRepository carRepository) {
         this.bookingRepository = bookingRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.carRepository = carRepository;
     }
 
     public Booking createBooking (Booking booking) {
@@ -35,6 +39,10 @@ public class BookingService {
         newBooking.setDepartureSite(booking.getDepartureSite());
         newBooking.setArrivalSite(booking.getArrivalSite());
         newBooking.setCar(booking.getCar());
+
+        Car car = carRepository.findByCarId(booking.getCar().getCarId());
+        car.setCarSite(booking.getArrivalSite());
+
         newBooking.setDescription(booking.getDescription());
         Optional<User> bkUser = userService.getCurrentUser();
         newBooking.setUser(bkUser.get());
@@ -85,6 +93,8 @@ public class BookingService {
         Optional<Booking> bkg = bookingRepository.findById(id);
         if(bkg.get().getBookingStatus().equals(BookingStatus.VALIDATION_PENDING)) {
             bkg.get().setBookingStatus(BookingStatus.REJECTED);
+            Car car = carRepository.findByCarId(bkg.get().getCar().getCarId());
+            car.setCarSite(bkg.get().getDepartureSite());
         }
         return bkg;
     }
@@ -114,6 +124,8 @@ public class BookingService {
         if(bkg.get().getBookingStatus().equals(BookingStatus.VALIDATION_PENDING) ||
                 bkg.get().getBookingStatus().equals(BookingStatus.CONFIRMED)) {
             bkg.get().setBookingStatus(BookingStatus.CANCELED);
+            Car car = carRepository.findByCarId(bkg.get().getCar().getCarId());
+            car.setCarSite(bkg.get().getDepartureSite());
         }
         return bkg;
     }

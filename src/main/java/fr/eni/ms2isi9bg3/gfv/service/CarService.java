@@ -78,7 +78,7 @@ public class CarService {
         return car;
     }
 
-    public Car archiveCar(Car car) throws Exception {
+    public Car archiveCar(Car car) {
         CarFromBookingList cfB = bookingRepository.findCarLastBooking(car.getCarId());
         if (cfB.getCarId() != null) {
             if(cfB.getStatus().equals(BookingStatus.COMPLETED)) {
@@ -180,22 +180,28 @@ public class CarService {
 
         List<Car> carsList = new ArrayList<>();
         List<CarFromBookingList> cFLsb = bookingRepository.findCarsFromLastSiteInBooking(dsId);
-        if(cFLsb.size() > 0 || avCars.size() > 0) {
-            List<Car> archivedCars = carRepository.findAllByArchivedIsTrue();
-            if(archivedCars.size() > 0) {
-                List<CarFromBookingList> cFbNotArchived = cFLsb.stream()
-                        .filter(cFbl -> archivedCars.stream()
-                                .anyMatch(ac -> !ac.getCarId().equals(cFbl.getCarId())))
-                        .collect(Collectors.toList());
+        if(cFLsb.size() > 0) {
+            if (avCars.size() > 0) {
+                List<Car> archivedCars = carRepository.findAllByArchivedIsTrue();
+                if (archivedCars.size() > 0) {
+                    List<CarFromBookingList> cFbNotArchived = cFLsb.stream()
+                            .filter(cFbl -> archivedCars.stream()
+                                    .anyMatch(ac -> !ac.getCarId().equals(cFbl.getCarId())))
+                            .collect(Collectors.toList());
 
-                carsList = avCars.stream()
-                        .filter(avc -> !cFbNotArchived.contains(avc))
-                        .collect(Collectors.toList());
-            } else {
-                carsList = avCars.stream()
-                        .filter(avc -> !cFLsb.contains(avc))
-                        .collect(Collectors.toList());
+                    carsList = avCars.stream()
+                            .filter(avc -> cFbNotArchived.stream()
+                                    .noneMatch(cl -> cl.getCarId().equals(avc.getCarId())))
+                            .collect(Collectors.toList());
+                } else {
+                    carsList = avCars.stream()
+                            .filter(avc -> cFLsb.stream()
+                                    .noneMatch(cl -> cl.getCarId().equals(avc.getCarId())))
+                            .collect(Collectors.toList());
+                }
             }
+        } else {
+            carsList = new ArrayList<>(avCars);
         }
         return carsList;
     }
