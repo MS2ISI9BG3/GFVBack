@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -17,6 +18,7 @@ import java.net.UnknownHostException;
 
 @SpringBootApplication
 @Slf4j
+@EnableAsync
 public class GfvApplication extends SpringBootServletInitializer {
 
 	//private static final Logger log = LoggerFactory.getLogger(GfvApplication.class);

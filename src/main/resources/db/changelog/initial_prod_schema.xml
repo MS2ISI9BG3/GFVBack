@@ -14,7 +14,7 @@
     -->
     <changeSet id="00000000000001" author="dndizeye">
         <loadData
-                file="/db/changelog/data/user.csv"
+                file="/db/changelog/data/userProd.csv"
                 separator=";"
                 tableName="gfv_user">
             <column name="activated" type="boolean"/>

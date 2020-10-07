@@ -9,9 +9,9 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/gfvProd?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3309/gfvProd?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&createDatabaseIfNotExist=true
     username: root
-    password: 1234
+    password: wErty!g3
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -44,7 +44,7 @@ jhipster:
       time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
       max-entries: 100 # Number of objects in each cache entry
   cors:
-    allowed-origins: http://localhost:4200
+    allowed-origins: http://146.59.157.122:4200
     allowed-methods: '*'
     allowed-headers: '*'
     exposed-headers: 'Authorization,Link,X-Total-Count'
@@ -58,7 +58,7 @@ jhipster:
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://localhost:4200/public/login
+    base-url: http://146.59.157.122:4200/public/login
   audit-events:
     retention-period: 30 # Number of days before audit events are deleted.
   clientApp:
