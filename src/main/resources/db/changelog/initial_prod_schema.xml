@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="autoIncrement" value="true"/>
+
+    <!--
+        GFV core tables.
+        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
+    -->
+    <changeSet id="00000000000001" author="dndizeye">
+        <loadData
+                file="/db/changelog/data/user.csv"
+                separator=";"
+                tableName="gfv_user">
+            <column name="activated" type="boolean"/>
+            <column name="archived" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+        <dropDefaultValue tableName="gfv_user" columnName="created_date" columnDataType="datetime"/>
+        <loadData
+                file="/db/changelog/data/authority.csv"
+                separator=";"
+                tableName="gfv_authority">
+            <column name="name" type="string"/>
+        </loadData>
+
+        <loadData
+                file="/db/changelog/data/user_authority.csv"
+                separator=";"
+                tableName="gfv_user_authority">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,85 @@
+
+server:
+  port: 9988
+
+logging:
+  level:
+    ROOT: INFO
+    io.github.jhipster: DEBUG
+    fr.eni.ms2isi9bg3.gfv: DEBUG
+
+spring:
+  devtools:
+    restart:
+      enabled: true
+      additional-exclude: static/**,
+  datasource:
+    url: jdbc:mysql://localhost:3306/gfv?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&createDatabaseIfNotExist=true
+    username: root
+    password: 1234
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  h2:
+    console:
+      enabled: false
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+    hibernate:
+      ddl-auto: update
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: donald.ndizeye@gmail.com
+    password: nepedfhaccfcpxbv
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  liquibase:
+    change-log: classpath:/db/liquibase-changeLog.xml
+    contexts: dev, faker
+    enabled: true
+  application:
+    name: GFV
+
+mail:
+  path:
+    #Dossier de resources dans lequel sont stockés les images utilisées dans les mails
+    images: templates/mails/images/
+
+jhipster:
+  cache: # Cache configuration
+    ehcache: # Ehcache configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      max-entries: 100 # Number of objects in each cache entry
+  cors:
+    allowed-origins: http://localhost:4200
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allow-credentials: true
+    max-age: 1800
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        base64-secret: M5c05v41NSNaJiEBKT740uYsMsnEHNxWpIknjwRuqe2kaq4bSQu9vs2llt7IEqA/RYtGiXJzmuTmKnZz4DhmvdGXzqcyEo0MKCZTz1MOkbWx1ta30C5lelknAcsiSiax/B9IwM5tc2EqPetdoRbJGrREA+h8H8jMfoeWri4z6eE=
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://localhost:4200/public/login
+  audit-events:
+    retention-period: 30 # Number of days before audit events are deleted.
+  clientApp:
+    name: gfv

@@ -3,9 +3,11 @@ package fr.eni.ms2isi9bg3.gfv.service.dto;
 import fr.eni.ms2isi9bg3.gfv.domain.Booking;
 import fr.eni.ms2isi9bg3.gfv.enums.BookingStatus;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class CarFromBookingList extends Booking {
     private Long carId;

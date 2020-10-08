@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -18,23 +19,29 @@ import java.net.UnknownHostException;
 @SpringBootApplication
 @Slf4j
 @EnableAsync
-public class GfvApplication {
+public class GfvApplication extends SpringBootServletInitializer {
 
 	//private static final Logger log = LoggerFactory.getLogger(GfvApplication.class);
 
-	private final Environment env;
+	//private final Environment env;
 
+	/*
 	public GfvApplication(Environment env) {
 		this.env = env;
-	}
+	}*/
 
 	public static void main(String[] args) {
+		SpringApplication.run(GfvApplication.class, args);
+
+		/*
 		SpringApplication app = new SpringApplication(GfvApplication.class);
 		DefaultProfileUtil.addDefaultProfile(app);
 		Environment env = app.run(args).getEnvironment();
 		logApplicationStartup(env);
+		*/
 	}
 
+	/*
 	private static void logApplicationStartup(Environment env) {
 		String protocol = "http";
 		if (env.getProperty("server.ssl.key-store") != null) {
@@ -65,6 +72,6 @@ public class GfvApplication {
 						serverPort,
 						contextPath,
 						env.getActiveProfiles());
-	}
+	}*/
 
 }

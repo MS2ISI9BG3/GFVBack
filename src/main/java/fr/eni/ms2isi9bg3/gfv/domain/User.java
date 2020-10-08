@@ -3,7 +3,6 @@ package fr.eni.ms2isi9bg3.gfv.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.eni.ms2isi9bg3.gfv.config.Constants;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
